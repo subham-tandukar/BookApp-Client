@@ -3,7 +3,6 @@ import Loading from "../Loading/Loading";
 import { Tabs, Tab } from "@mui/material";
 import search from "../../img/icon/icon_search.svg";
 import DeletePop from "../PopUp/DeletePop";
-import Toast from "../Toast";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import BookContext from "../context/book context folder/bookContext";
@@ -75,7 +74,6 @@ const Book = () => {
 
   return (
     <>
-      <Toast />
       <div className="container-fluid p-0">
         <div className="row">
           <div className="col-lg-8">

@@ -173,7 +173,9 @@ const Login = () => {
                   </div>
                   <p className="errormsg ">{formError.password}</p>
                   <button
-                    className="uk-button submit btn_1 full_width text-center"
+                    className={`uk-button submit btn_1 full_width text-center ${
+                      isSubmit ? "disable-cursor" : ""
+                    }`}
                     onClick={handleSubmit}
                   >
                     {isSubmit ? <span>Loading ...</span> : <span>Log in</span>}

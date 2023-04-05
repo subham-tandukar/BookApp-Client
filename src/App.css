@@ -58,6 +58,10 @@ li {
   list-style: none;
 }
 
+.disable-cursor {
+  cursor: not-allowed !important;
+}
+
 ul,
 ol {
   margin: 0;
@@ -796,7 +800,7 @@ sup {
   padding-bottom: 50px;
   position: fixed;
   width: 270px;
-  z-index: 999;
+  z-index: 100;
   overflow: hidden;
   overflow-y: auto;
   background: #fff;
@@ -1549,17 +1553,20 @@ sup {
 }
 
 .sidebar::-webkit-scrollbar-track,
+.medium-popup-body::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track {
   background-color: #ddd;
 }
 
 .sidebar::-webkit-scrollbar,
+.medium-popup-body::-webkit-scrollbar,
 body::-webkit-scrollbar {
   width: 6px;
   background-color: #ddd;
 }
 
 .sidebar::-webkit-scrollbar-thumb,
+.medium-popup-body::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb {
   background-color: #f8dbdd;
 }
@@ -1953,6 +1960,8 @@ body::-webkit-scrollbar {
 
 .single_user_pil .user_pils_thumb img {
   border: 1px solid #94c0d4;
+  width: 100%;
+  height: 100%;
 }
 
 .single_user_pil .user_info {
@@ -2108,7 +2117,7 @@ body::-webkit-scrollbar {
   left: 50%;
   transform: translate(-50%, -50%);
   height: 100vh;
-  z-index: 20000;
+  z-index: 200;
   background: rgba(0, 0, 0, 0.75);
   display: none;
 }
@@ -2168,7 +2177,8 @@ body::-webkit-scrollbar {
 }
 .popup-bg .popup .popup-footer {
   position: fixed;
-  bottom: 5px;
+  bottom: 0;
+  padding-bottom: 5px;
   right: 0;
   width: 100%;
   border-top: 1px solid #d9d9d9;
@@ -2177,6 +2187,7 @@ body::-webkit-scrollbar {
   justify-content: end;
   padding-right: 0.5rem;
   background: #fff;
+  z-index: 100;
 }
 .popup-bg .popup .popup-footer .uk-button {
   background: #6561a1;
@@ -2223,9 +2234,28 @@ body::-webkit-scrollbar {
 .popup-bg .small-popup .small-popup-footer:hover svg {
   color: #43a047;
 }
+.popup-bg .medium-popup {
+  width: 50%;
+}
+.popup-bg .medium-popup .medium-popup-body {
+  max-height: 80vh;
+  overflow: auto;
+  padding-bottom: 4rem;
+  padding-top: 0;
+}
+
+.sticky-field {
+  position: sticky;
+  padding: 1rem 0;
+  top: 0;
+  background: #fff;
+}
 
 @media (max-width: 960px) {
   .popup-bg .popup {
+    width: 60%;
+  }
+  .medium-popup {
     width: 60%;
   }
 }
@@ -2419,24 +2449,67 @@ label {
   padding-left: 10px;
 }
 
+.MuiFormControl-root {
+  width: 100%;
+}
+
+.MuiFormLabel-root {
+  font-size: 13px !important;
+  line-height: 2.4375em !important;
+}
+
+#select-label {
+  line-height: 1.4375em !important;
+}
+
+#select {
+  color: #81879f !important;
+  font-size: 14px !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: #e5ecff !important;
+  border-radius: 10px !important;
+}
+
+.MuiInputBase-input {
+  padding: 8.5px 14px !important;
+}
+
+.MuiInputBase-root {
+  padding: 0.4rem !important;
+}
+
+.MuiSelect-select {
+  padding: 7.5px 14px !important;
+  height: auto;
+}
+
 .common_input input,
 .common_input textarea {
-  height: 47px;
-  line-height: 47px;
   background-color: transparent;
   border: 0;
-  padding: 10px;
   color: #81879f;
   font-weight: 400;
   font-size: 14px;
   width: 100%;
   display: block;
-  border-radius: 10px;
-  border: 1px solid #e5ecff;
 }
 
 .common_input textarea {
   height: auto;
+}
+
+.common_input .addBtn {
+  height: 50px;
+  width: 50px;
+  border-radius: 4px;
+  background: #6561a1;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nice_Select2 {

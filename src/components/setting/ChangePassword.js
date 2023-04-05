@@ -3,7 +3,6 @@ import { GrFormClose } from "react-icons/gr";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Fetchdata } from "../hooks/getData";
-import Toast from "../Toast";
 import $ from "jquery";
 import NavbarContext from "../context/navbar-context";
 import ChangePasswordPop from "./ChangePasswordPopup";
@@ -79,27 +78,31 @@ const ChangePassword = ({
         Type: "POST",
       };
 
-      Fetchdata(dataForm).then(function (result) {
-        if (result.StatusCode === 200) {
-          setLoader(true);
-          $(".changePasswordPop").slideUp(500);
-          $(".changePasswordPopBg").fadeOut(500);
-          setFormValues(initalvalue);
-          //   toast.success(result.Message, {
-          //     theme: "light",
-          //   });
-          //   setChangePassPopup(false);
-          setTimeout(() => {
-            setLoader(false);
-            setConfirmPop(true);
-          }, 1000);
-        } else {
-          toast.error(result.Message, {
-            theme: "light",
-          });
-        }
-      });
-
+      Fetchdata(dataForm)
+        .then(function (result) {
+          if (result.StatusCode === 200) {
+            setLoader(true);
+            $(".changePasswordPop").slideUp(500);
+            $(".changePasswordPopBg").fadeOut(500);
+            setFormValues(initalvalue);
+            //   toast.success(result.Message, {
+            //     theme: "light",
+            //   });
+            //   setChangePassPopup(false);
+            setTimeout(() => {
+              setLoader(false);
+              setConfirmPop(true);
+            }, 1000);
+          } else {
+            toast.error(result.Message, {
+              theme: "light",
+            });
+          }
+        })
+        .catch((result) => {
+          setIsSubmit(false);
+        });
+    } else {
       setIsSubmit(false);
     }
   }, [formErrors]);
@@ -113,7 +116,6 @@ const ChangePassword = ({
 
   return (
     <>
-      <Toast />
       <div className="popup-bg changePasswordPopBg">
         <div className="popup changePasswordPop">
           <div className="popup-head">
@@ -167,8 +169,11 @@ const ChangePassword = ({
           </div>
 
           <div className="popup-footer">
-            <button className="uk-button " onClick={handleSubmit}>
-              Submit
+            <button
+              className={`uk-button ${isSubmit ? "disable-cursor" : ""}`}
+              onClick={handleSubmit}
+            >
+              {isSubmit ? "Changing ..." : "Change"}
             </button>
             <button className="uk-button cancel-btn" onClick={closePopUp}>
               Cancel

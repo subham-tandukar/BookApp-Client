@@ -4,6 +4,7 @@ import Sidebar from "./Sidebar";
 import $ from "jquery";
 import NavbarContext from "../context/navbar-context";
 import Footer from "../Footer";
+import Toast from "../Toast";
 
 const Layout = (props) => {
   const { userDetails, setUserDetails } = useContext(NavbarContext);
@@ -47,6 +48,8 @@ const Layout = (props) => {
           handleMobHam={handleMobHam}
           handleHam={handleHam}
         />
+
+        <Toast />
 
         <div className="main_content_iner overly_inner">{props.children}</div>
 

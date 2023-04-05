@@ -14,14 +14,13 @@ function BookState(props) {
     auther: "",
     ageGrp: "",
     page: "",
-    wordCount: "",
-    edition: "",
-    yrPub: "",
     qty: "",
-    genre: "",
+    genre: [],
     status: "",
+    rating: "",
+    language: "",
     description: "",
-    userId: "",
+    userId: "-1",
   };
 
   const [formValue, setFormValue] = useState(initialValue);
@@ -74,12 +73,11 @@ function BookState(props) {
       auther: data.Auther,
       ageGrp: data.AgeGroup,
       page: data.Page,
-      wordCount: data.WordCount,
-      edition: data.Edition,
-      yrPub: data.YearPublished,
       qty: data.Quantity,
       genre: data.Genre,
       status: data.Status,
+      rating: data.Rating,
+      language: data.Language,
       description: data.Description,
       userId: data.UserID,
     });

@@ -264,7 +264,9 @@ const ForgetPassword = () => {
                         <p className="errormsg mb-3">{formError.email}</p>
 
                         <button
-                          className="uk-button submit btn_1 full_width text-center"
+                          className={`uk-button submit btn_1 full_width text-center ${
+                            isSubmit ? "disable-cursor" : ""
+                          }`}
                           onClick={handleSubmit}
                         >
                           {isSubmit ? (
@@ -300,7 +302,9 @@ const ForgetPassword = () => {
                         </div>
 
                         <button
-                          className="uk-button submit btn_1 full_width text-center"
+                          className={`uk-button submit btn_1 full_width text-center ${
+                            isVerify ? "disable-cursor" : ""
+                          }`}
                           onClick={handleVerify}
                         >
                           {isVerify ? (
@@ -352,7 +356,9 @@ const ForgetPassword = () => {
                       <p className="errormsg ">{newFormError.password}</p>
 
                       <button
-                        className="uk-button submit btn_1 full_width text-center"
+                        className={`uk-button submit btn_1 full_width text-center ${
+                          isNewSubmit ? "disable-cursor" : ""
+                        }`}
                         onClick={handleNewSubmit}
                       >
                         {isNewSubmit ? (

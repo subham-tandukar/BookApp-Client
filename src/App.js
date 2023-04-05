@@ -18,6 +18,8 @@ import ScrollToTop from "./components/ScrollToTop";
 import Register from "./components/register/Register";
 import ForgetPassword from "./components/Login/ForgetPassword";
 import BookState from "./components/context/book context folder/bookState";
+import GenreState from "./components/context/genre context folder/genreState";
+import Genre from "./components/Genre/Genre";
 
 const App = () => {
   const { UserDATA } = useContext(AuthContext);
@@ -37,22 +39,25 @@ const App = () => {
         {UserDATA && (
           <>
             {/* <UserState> */}
-            <BookState>
-              <ScrollToTop />
-              <Layout>
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/book" element={<Book />} />
-                  <Route path="/add-book" element={<AddBook />} />
-                  <Route path="/rented-book" element={<RentedBook />} />
-                  <Route path="/user" element={<User />} />
-                  <Route path="/add-user" element={<AddUser />} />
+            <GenreState>
+              <BookState>
+                <ScrollToTop />
+                <Layout>
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/book" element={<Book />} />
+                    <Route path="/add-book" element={<AddBook />} />
+                    <Route path="/rented-book" element={<RentedBook />} />
+                    <Route path="/user" element={<User />} />
+                    <Route path="/add-user" element={<AddUser />} />
+                    <Route path="/genre" element={<Genre />} />
 
-                  {/* Page Not Found */}
-                  <Route path="*" element={<ErrorPage />} />
-                </Routes>
-              </Layout>
-            </BookState>
+                    {/* Page Not Found */}
+                    <Route path="*" element={<ErrorPage />} />
+                  </Routes>
+                </Layout>
+              </BookState>
+            </GenreState>
             {/* </UserState> */}
           </>
         )}

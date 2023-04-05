@@ -2,17 +2,71 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import CloseIcon from "../../img/CloseIcon.svg";
 import Plus from "../../img/Plus.png";
 import { toast } from "react-toastify";
-// import "jquery-nice-select/css/style.css";
 import $ from "jquery";
 import { Fetchdata } from "../hooks/getData";
 import NavbarContext from "../context/navbar-context";
-import Toast from "../Toast";
 import ConfirmPop from "../PopUp/ConfirmPop";
 import Loading from "../Loading/Loading";
 import BookContext from "../context/book context folder/bookContext";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import Autocomplete from "@mui/material/Autocomplete";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import Checkbox from "@mui/material/Checkbox";
+import { MdOutlineAdd } from "react-icons/md";
+import GenreContext from "../context/genre context folder/genreContext";
+import { Link } from "react-router-dom";
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+const age = [
+  {
+    value: "4-8",
+    label: "4-8",
+  },
+  {
+    value: "9-12",
+    label: "9-12",
+  },
+  {
+    value: "13-19",
+    label: "13-19",
+  },
+  {
+    value: "20+",
+    label: "20+",
+  },
+];
+const lan = [
+  {
+    value: "en",
+    label: "English",
+  },
+  {
+    value: "np",
+    label: "Nepali",
+  },
+  {
+    value: "tr",
+    label: "Translated",
+  },
+];
+const stat = [
+  {
+    value: "1",
+    label: "Available",
+  },
+  {
+    value: "2",
+    label: "Unavailable",
+  },
+];
 
 const AddBook = () => {
   const { baseURL } = useContext(NavbarContext);
+  const { genreList } = useContext(GenreContext);
 
   const {
     initialValue,
@@ -29,10 +83,13 @@ const AddBook = () => {
     getBookData,
   } = useContext(BookContext);
 
+
+
   const [loader, setLoader] = useState(false);
   const [confirmPop, setConfirmPop] = useState(false);
 
   // set image
+
   const handleImage = (e) => {
     if (e.target.files && e.target.files[0]) {
       let reader = new FileReader();
@@ -49,6 +106,13 @@ const AddBook = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValue({ ...formValue, [name]: value });
+  };
+
+  const handleOnChange = (event, newValue) => {
+    setFormValue((prevValue) => ({
+      ...prevValue,
+      genre: newValue,
+    }));
   };
 
   const validate = (values) => {
@@ -86,12 +150,11 @@ const AddBook = () => {
         Auther: formValue.auther,
         AgeGroup: formValue.ageGrp,
         Page: formValue.page,
-        WordCount: formValue.wordCount,
-        Edition: formValue.edition,
-        YearPublished: formValue.yrPub,
         Quantity: formValue.qty,
         Genre: formValue.genre,
         Status: formValue.status,
+        Rating: formValue.rating,
+        Language: formValue.language,
         Description: formValue.description,
         Image: image,
         FetchURL: `${baseURL}/api/book`,
@@ -131,6 +194,13 @@ const AddBook = () => {
     }
   }, [confirmPop]);
 
+  useEffect(() => {
+    setIsSubmit(false);
+    setFormValue(initialValue);
+    setIsUploaded(false);
+    setFormError({});
+  }, []);
+
   //API to hit User list
   const [userList, setUserList] = useState([]);
 
@@ -154,9 +224,14 @@ const AddBook = () => {
       }
     });
   };
+
+  const dropDownValue = userList.map((item) => ({
+    value: item._id,
+    label: item.Name,
+  }));
+
   return (
     <>
-      <Toast />
       <div className="container-fluid p-0">
         <div className="row">
           <div className="col-12">
@@ -172,9 +247,11 @@ const AddBook = () => {
                 <div className="row">
                   <div className="col-lg-6">
                     <div className="common_input mb_15">
-                      <input
-                        type="text"
-                        placeholder="Book Name*"
+                      <TextField
+                        id="outlined-basic"
+                        label="Book Name*"
+                        variant="outlined"
+                        size="small"
                         name="bookName"
                         onChange={handleChange}
                         value={formValue.bookName}
@@ -184,148 +261,185 @@ const AddBook = () => {
                   </div>
                   <div className="col-lg-6">
                     <div className="common_input mb_15">
-                      <input
-                        type="text"
+                      <TextField
+                        id="outlined-basic"
+                        label="Author*"
+                        variant="outlined"
+                        size="small"
                         name="auther"
                         onChange={handleChange}
                         value={formValue.auther}
-                        placeholder="Author*"
                       />
                       <p className="errormsg">{formError.auther}</p>
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="common_input mb_15">
-                      <select
-                        className="nice_Select2 nice_Select_line wide w-100"
-                        // ref={selectRef}
+                      <TextField
+                        id="select"
+                        select
+                        label="Age Group"
                         name="ageGrp"
                         onChange={handleChange}
                         value={formValue.ageGrp}
                       >
-                        <option value="0">Age Group</option>
-                        <option value="1">4-8</option>
-                        <option value="2">9-12</option>
-                        <option value="3">13-19</option>
-                        <option value="4">20+</option>
-                      </select>
+                        {age.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="common_input mb_15">
-                      <input
+                      <TextField
+                        id="outlined-basic"
+                        label="Pages"
                         type="number"
+                        // InputLabelProps={{
+                        //   shrink: true,
+                        // }}
+                        variant="outlined"
+                        size="small"
                         name="page"
                         onChange={handleChange}
                         value={formValue.page}
-                        placeholder="Pages"
                       />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="common_input mb_15">
-                      <input
+                      <TextField
+                        id="outlined-basic"
+                        label="Rating"
                         type="number"
-                        name="wordCount"
+                        variant="outlined"
+                        size="small"
+                        name="rating"
                         onChange={handleChange}
-                        value={formValue.wordCount}
-                        placeholder="Word Count"
+                        value={formValue.rating}
                       />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="common_input mb_15">
-                      <input
-                        type="number"
-                        name="edition"
+                      <TextField
+                        id="select"
+                        select
+                        label="Language"
+                        name="language"
                         onChange={handleChange}
-                        value={formValue.edition}
-                        placeholder="Edition"
-                      />
+                        value={formValue.language}
+                      >
+                        {lan.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="common_input mb_15 d-flex">
+                      <div className="w-100">
+                        <Autocomplete
+                          multiple
+                          id="select"
+                          options={genreList.length > 0 ? genreList : []}
+                          name="genre"
+                          value={formValue.genre}
+                          onChange={handleOnChange}
+                          disableCloseOnSelect
+                          getOptionLabel={(option) => option.title || ""}
+                          renderOption={(props, option, { selected }) => (
+                            <li {...props}>
+                              <Checkbox
+                                icon={icon}
+                                checkedIcon={checkedIcon}
+                                style={{ marginRight: 8 }}
+                                checked={selected}
+                              />
+                              {option.title}
+                            </li>
+                          )}
+                          // style={{ width: 500 }}
+                          renderInput={(params) => (
+                            <TextField {...params} label="Genre" />
+                          )}
+                        />
+                      </div>
+                      <Link className="addBtn" to="/genre">
+                        <MdOutlineAdd color="#fff" fontSize="1.5rem" />
+                      </Link>
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="common_input mb_15">
-                      <input
+                      <TextField
+                        id="outlined-basic"
+                        label="Quantity"
                         type="number"
-                        name="yrPub"
-                        onChange={handleChange}
-                        value={formValue.yrPub}
-                        placeholder="Year Published"
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-6">
-                    <div className="common_input mb_15">
-                      <input
-                        type="number"
+                        variant="outlined"
+                        size="small"
                         name="qty"
                         onChange={handleChange}
                         value={formValue.qty}
-                        placeholder="Quantity"
                       />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="common_input mb_15">
-                      <input
-                        type="text"
-                        name="genre"
+                      <TextField
+                        id="select"
+                        select
+                        label="Select User"
+                        name="userId"
+                        defaultValue="-1"
                         onChange={handleChange}
-                        value={formValue.genre}
-                        placeholder="Genre"
-                      />
+                        value={formValue.userId}
+                      >
+                        <MenuItem value="-1">HTDRNL</MenuItem>
+                        {dropDownValue.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                      <p className="errormsg">{formError.userId}</p>
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="common_input mb_15">
-                      <select
-                        className="nice_Select2 nice_Select_line wide  w-100"
-                        // ref={selectRef}
+                      <TextField
+                        id="select"
+                        select
+                        label="Status*"
                         name="status"
                         onChange={handleChange}
                         value={formValue.status}
                       >
-                        <option value="0">Status*</option>
-                        <option value="1">Available</option>
-                        <option value="2">Unavailable</option>
-                      </select>
+                        {stat.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
                       <p className="errormsg">{formError.status}</p>
                     </div>
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-12">
                     <div className="common_input mb_15">
-                      <textarea
-                        id="description"
-                        value={formValue.description}
-                        placeholder="Description"
-                        onChange={handleChange}
+                      <TextField
+                        id="outlined-multiline-static"
+                        label="Description"
                         name="description"
-                        rows="1"
-                        cols="12"
-                      ></textarea>
+                        multiline
+                        rows={4}
+                        onChange={handleChange}
+                        value={formValue.description}
+                      />
                     </div>
-                  </div>
-                  <div className="col-lg-6">
-                    <select
-                      className="nice_Select2 nice_Select_line wide mb_15 w-100"
-                      name="userId"
-                      onChange={handleChange}
-                      value={formValue.userId}
-                    >
-                      <option disabled value="0" selected>
-                        Select User
-                      </option>
-                      <option value="">HTDRNL</option>
-                      {userList.map((list) => {
-                        return (
-                          <option key={list._id} value={list._id}>
-                            {list.Name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    <p className="errormsg">{formError.userId}</p>
                   </div>
 
                   <div className="box_header mt-3">
@@ -387,7 +501,9 @@ const AddBook = () => {
                     <div className="create_report_btn mt_30">
                       <button
                         onClick={handleSubmit}
-                        className="btn_1 radius_btn d-block text-center w-100"
+                        className={`btn_1 radius_btn d-block text-center w-100 ${
+                          isSubmit ? "disable-cursor" : ""
+                        }`}
                       >
                         {isSubmit ? "Adding ..." : "Add Book"}
                       </button>

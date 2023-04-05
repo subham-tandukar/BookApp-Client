@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import $ from "jquery";
 import { Fetchdata } from "../hooks/getData";
 import NavbarContext from "../context/navbar-context";
-import Toast from "../Toast";
 import ConfirmPop from "../PopUp/ConfirmPop";
 import Loading from "../Loading/Loading";
 
@@ -85,7 +84,6 @@ const AddUser = () => {
 
   return (
     <>
-      <Toast />
       <div className="container-fluid p-0">
         <div className="row">
           <div className="col-12">

@@ -64,6 +64,11 @@ const Sidebar = ({ handleMobHam }) => {
                 </NavLink>
               </li>
               <li>
+                <NavLink to="/genre" onClick={handleMobHam}>
+                  Add Book Genre
+                </NavLink>
+              </li>
+              <li>
                 <NavLink to="/borrowed-book" onClick={handleMobHam}>
                   Borrowed Books
                 </NavLink>

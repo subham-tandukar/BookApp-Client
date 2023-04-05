@@ -255,7 +255,10 @@ const Register = () => {
                         <div className="image-upload">
                           {!isUploaded ? (
                             <>
-                              <label htmlFor="upload-input">
+                              <label
+                                htmlFor="upload-input "
+                                style={{ paddingLeft: "0" }}
+                              >
                                 <img
                                   src={placeholder}
                                   draggable={"false"}
@@ -354,7 +357,9 @@ const Register = () => {
                     </div>
                     <p className="errormsg ">{formError.password}</p>
                     <button
-                      className="uk-button submit btn_1 full_width text-center"
+                      className={`uk-button submit btn_1 full_width text-center ${
+                        isSubmit ? "disable-cursor" : ""
+                      }`}
                       onClick={handleSubmit}
                     >
                       {isSubmit ? (
@@ -396,7 +401,9 @@ const Register = () => {
                     </div>
 
                     <button
-                      className="uk-button submit btn_1 full_width text-center"
+                      className={`uk-button submit btn_1 full_width text-center ${
+                        isVerify ? "disable-cursor" : ""
+                      }`}
                       onClick={handleVerify}
                     >
                       {isVerify ? (

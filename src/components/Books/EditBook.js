@@ -8,10 +8,65 @@ import CloseIcon from "../../img/CloseIcon.svg";
 import Plus from "../../img/Plus.png";
 import Loading from "../Loading/Loading";
 import { toast } from "react-toastify";
-import Toast from "../Toast";
+import { Link } from "react-router-dom";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import Autocomplete from "@mui/material/Autocomplete";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import Checkbox from "@mui/material/Checkbox";
+import GenreContext from "../context/genre context folder/genreContext";
+import { MdOutlineAdd } from "react-icons/md";
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+const age = [
+  {
+    value: "4-8",
+    label: "4-8",
+  },
+  {
+    value: "9-12",
+    label: "9-12",
+  },
+  {
+    value: "13-19",
+    label: "13-19",
+  },
+  {
+    value: "20+",
+    label: "20+",
+  },
+];
+const lan = [
+  {
+    value: "en",
+    label: "English",
+  },
+  {
+    value: "np",
+    label: "Nepali",
+  },
+  {
+    value: "tr",
+    label: "Translated",
+  },
+];
+const stat = [
+  {
+    value: "1",
+    label: "Available",
+  },
+  {
+    value: "2",
+    label: "Unavailable",
+  },
+];
 
 const EditBook = () => {
   const { baseURL } = useContext(NavbarContext);
+  const { genreList } = useContext(GenreContext);
   const {
     formValue,
     setFormValue,
@@ -28,7 +83,7 @@ const EditBook = () => {
     getBookData,
   } = useContext(BookContext);
   const [loader, setLoader] = useState(false);
-
+  console.log("mahima", formValue);
   // set image
   const handleImage = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -48,6 +103,36 @@ const EditBook = () => {
     setFormValue({ ...formValue, [name]: value });
   };
 
+  const handleOnChange = (event, newValue) => {
+    // Get the id of the newly selected option
+    const newOptionId = newValue[newValue.length - 1]._id;
+
+    // Check if the newly selected option already exists in formValue.genre
+    const existingOptionIndex = formValue.genre.findIndex(
+      (option) => option._id === newOptionId
+    );
+
+    if (existingOptionIndex >= 0) {
+      // If the newly selected option already exists, remove it from formValue.genre
+      const updatedGenre = formValue.genre.filter(
+        (option) => option._id !== newOptionId
+      );
+      setFormValue({
+        ...formValue,
+        genre: updatedGenre,
+      });
+    } else {
+      // If the newly selected option doesn't exist, add it to formValue.genre
+      const newOptionTitle = newValue[newValue.length - 1].title;
+      setFormValue({
+        ...formValue,
+        genre: [
+          ...formValue.genre,
+          { title: newOptionTitle, _id: newOptionId },
+        ],
+      });
+    }
+  };
   const validate = (values) => {
     const errors = {};
 
@@ -84,12 +169,11 @@ const EditBook = () => {
         Auther: formValue.auther,
         AgeGroup: formValue.ageGrp,
         Page: formValue.page,
-        WordCount: formValue.wordCount,
-        Edition: formValue.edition,
-        YearPublished: formValue.yrPub,
         Quantity: formValue.qty,
         Genre: formValue.genre,
         Status: formValue.status,
+        Rating: formValue.rating,
+        Language: formValue.language,
         Description: formValue.description,
         Image: image,
         FetchURL: `${baseURL}/api/book`,
@@ -112,7 +196,7 @@ const EditBook = () => {
               getBookData();
             }, 1000);
           } else {
-            toast.error(result.Message.name, {
+            toast.error(result.Message, {
               theme: "light",
             });
             setIsEditSubmit(false);
@@ -157,9 +241,13 @@ const EditBook = () => {
     setIsEditSubmit(false);
     setIsUploaded(false);
   };
+  const dropDownValue = userList.map((item) => ({
+    value: item._id,
+    label: item.Name,
+  }));
+
   return (
     <>
-      <Toast />
       <section className="popup-bg editPopBg">
         <div className="popup editPop">
           <div className="popup-head">
@@ -174,10 +262,11 @@ const EditBook = () => {
               <div className="row">
                 <div className="col-lg-6">
                   <div className="common_input mb_15">
-                    <label>Book Name*</label>
-                    <input
-                      type="text"
-                      placeholder="Book Name*"
+                    <TextField
+                      id="outlined-basic"
+                      label="Book Name*"
+                      variant="outlined"
+                      size="small"
                       name="bookName"
                       onChange={handleChange}
                       value={formValue.bookName}
@@ -187,159 +276,187 @@ const EditBook = () => {
                 </div>
                 <div className="col-lg-6">
                   <div className="common_input mb_15">
-                    <label>Author*</label>
-                    <input
-                      type="text"
+                    <TextField
+                      id="outlined-basic"
+                      label="Author*"
+                      variant="outlined"
+                      size="small"
                       name="auther"
                       onChange={handleChange}
                       value={formValue.auther}
-                      placeholder="Author*"
                     />
                     <p className="errormsg">{formError.auther}</p>
                   </div>
                 </div>
                 <div className="col-lg-6">
                   <div className="common_input mb_15">
-                    <label>Age Group</label>
-                    <select
-                      className="nice_Select2 nice_Select_line wide w-100"
-                      // ref={selectRef}
+                    <TextField
+                      id="select"
+                      select
+                      label="Age Group"
                       name="ageGrp"
                       onChange={handleChange}
                       value={formValue.ageGrp}
                     >
-                      <option value="0">Age Group</option>
-                      <option value="1">4-8</option>
-                      <option value="2">9-12</option>
-                      <option value="3">13-19</option>
-                      <option value="4">20+</option>
-                    </select>
+                      {age.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                   </div>
                 </div>
                 <div className="col-lg-6">
                   <div className="common_input mb_15">
-                    <label>Pages</label>
-                    <input
+                    <TextField
+                      id="outlined-basic"
+                      label="Pages"
                       type="number"
+                      // InputLabelProps={{
+                      //   shrink: true,
+                      // }}
+                      variant="outlined"
+                      size="small"
                       name="page"
                       onChange={handleChange}
                       value={formValue.page}
-                      placeholder="Pages"
                     />
                   </div>
                 </div>
                 <div className="col-lg-6">
                   <div className="common_input mb_15">
-                    <label>Word Count</label>
-                    <input
+                    <TextField
+                      id="outlined-basic"
+                      label="Rating"
                       type="number"
-                      name="wordCount"
+                      variant="outlined"
+                      size="small"
+                      name="rating"
                       onChange={handleChange}
-                      value={formValue.wordCount}
-                      placeholder="Word Count"
+                      value={formValue.rating}
                     />
                   </div>
                 </div>
                 <div className="col-lg-6">
                   <div className="common_input mb_15">
-                    <label>Edition</label>
-                    <input
-                      type="number"
-                      name="edition"
+                    <TextField
+                      id="select"
+                      select
+                      label="Language"
+                      name="language"
                       onChange={handleChange}
-                      value={formValue.edition}
-                      placeholder="Edition"
-                    />
+                      value={formValue.language}
+                    >
+                      {lan.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </div>
+                </div>
+                <div className="col-lg-6">
+                  <div className="common_input mb_15 d-flex">
+                    <div className="w-100">
+                      <Autocomplete
+                        multiple
+                        id="select"
+                        options={genreList.length > 0 ? genreList : []}
+                        name="genre"
+                        value={formValue.genre}
+                        onChange={handleOnChange}
+                        disableCloseOnSelect
+                        getOptionLabel={(option) => option.title || ""}
+                        renderOption={(props, option) => (
+                          <li {...props}>
+                            <Checkbox
+                              icon={icon}
+                              checkedIcon={checkedIcon}
+                              style={{ marginRight: 8 }}
+                              checked={formValue.genre.some(
+                                (g) => g._id === option._id
+                              )}
+                            />
+                            {option.title}
+                          </li>
+                        )}
+                        // style={{ width: 500 }}
+                        renderInput={(params) => (
+                          <TextField {...params} label="Genre" />
+                        )}
+                      />
+                    </div>
+                    <Link className="addBtn" to="/genre">
+                      <MdOutlineAdd color="#fff" fontSize="1.5rem" />
+                    </Link>
                   </div>
                 </div>
                 <div className="col-lg-6">
                   <div className="common_input mb_15">
-                    <label>Year Published</label>
-                    <input
+                    <TextField
+                      id="outlined-basic"
+                      label="Quantity"
                       type="number"
-                      name="yrPub"
-                      onChange={handleChange}
-                      value={formValue.yrPub}
-                      placeholder="Year Published"
-                    />
-                  </div>
-                </div>
-                <div className="col-lg-6">
-                  <div className="common_input mb_15">
-                    <label>Quantity</label>
-                    <input
-                      type="number"
+                      variant="outlined"
+                      size="small"
                       name="qty"
                       onChange={handleChange}
                       value={formValue.qty}
-                      placeholder="Quantity"
                     />
                   </div>
                 </div>
                 <div className="col-lg-6">
                   <div className="common_input mb_15">
-                    <label>Genre</label>
-                    <input
-                      type="text"
-                      name="genre"
+                    <TextField
+                      id="select"
+                      select
+                      label="Select User"
+                      name="userId"
+                      defaultValue="-1"
                       onChange={handleChange}
-                      value={formValue.genre}
-                      placeholder="Genre"
-                    />
+                      value={formValue.userId}
+                    >
+                      <MenuItem value="-1">HTDRNL</MenuItem>
+                      {dropDownValue.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                    <p className="errormsg">{formError.userId}</p>
                   </div>
                 </div>
                 <div className="col-lg-6">
                   <div className="common_input mb_15">
-                    <label>Status*</label>
-                    <select
-                      className="nice_Select2 nice_Select_line wide  w-100"
-                      // ref={selectRef}
+                    <TextField
+                      id="select"
+                      select
+                      label="Status*"
                       name="status"
                       onChange={handleChange}
                       value={formValue.status}
                     >
-                      <option value="0">Status*</option>
-                      <option value="1">Available</option>
-                      <option value="2">Unavailable</option>
-                    </select>
+                      {stat.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                     <p className="errormsg">{formError.status}</p>
                   </div>
                 </div>
-                <div className="col-lg-6">
+                <div className="col-lg-12">
                   <div className="common_input mb_15">
-                    <label>Description</label>
-                    <textarea
-                      id="description"
-                      value={formValue.description}
-                      placeholder="Description"
-                      onChange={handleChange}
+                    <TextField
+                      id="outlined-multiline-static"
+                      label="Description"
                       name="description"
-                      rows="1"
-                      cols="12"
-                    ></textarea>
+                      multiline
+                      rows={4}
+                      onChange={handleChange}
+                      value={formValue.description}
+                    />
                   </div>
-                </div>
-                <div className="col-lg-6">
-                  <label>Select User</label>
-                  <select
-                    className="nice_Select2 nice_Select_line wide mb_15 w-100"
-                    name="userId"
-                    onChange={handleChange}
-                    value={formValue.userId}
-                  >
-                    <option disabled value="0" selected>
-                      Select User
-                    </option>
-                    <option value="">HTDRNL</option>
-                    {userList.map((list) => {
-                      return (
-                        <option key={list._id} value={list._id}>
-                          {list.Name}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  <p className="errormsg">{formError.userId}</p>
                 </div>
 
                 <div className="box_header mt-3">
@@ -401,7 +518,10 @@ const EditBook = () => {
             </div>
           </div>
           <div className="popup-footer">
-            <button className="uk-button" onClick={handleSubmit}>
+            <button
+              className={`uk-button ${isEditSubmit ? "disable-cursor" : ""}`}
+              onClick={handleSubmit}
+            >
               {isEditSubmit ? "Updating..." : "Update"}
             </button>
             <button className="uk-button cancel-btn" onClick={handleClose}>

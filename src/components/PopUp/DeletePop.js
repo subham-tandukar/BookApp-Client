@@ -22,7 +22,10 @@ const DeletePop = ({ title, handleDelete, loading }) => {
             <p style={{ color: "#000" }}>Are you sure you want to Delete?</p>
           </div>
           <div className="popup-footer">
-            <button className="uk-button" onClick={handleDelete}>
+            <button
+              className={`uk-button ${loading ? "disable-cursor" : ""}`}
+              onClick={handleDelete}
+            >
               {loading ? "Deleting..." : "Delete"}
             </button>
             <button className="uk-button cancel-btn" onClick={handleClose}>
