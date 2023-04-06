@@ -8,6 +8,8 @@ import "aos/dist/aos.css";
 import BookContext from "../context/book context folder/bookContext";
 import EditBook from "./EditBook";
 import { BsArrowUpRight } from "react-icons/bs";
+import GenreContext from "../context/genre context folder/genreContext";
+import { Link } from "react-router-dom";
 
 const Book = () => {
   const {
@@ -22,7 +24,11 @@ const Book = () => {
     setStatus,
     bookLoading,
     getBookData,
+    genre,
+    setGenre,
   } = useContext(BookContext);
+
+  const { genreList } = useContext(GenreContext);
 
   const searchInput = useRef("");
   const [showScrollToTop, setShowScrollToTop] = useState(false);
@@ -68,24 +74,27 @@ const Book = () => {
     AOS.init();
   }, []);
 
-  const handleChange = (event, newValue) => {
+  const handleStatusChange = (event, newValue) => {
     setStatus(newValue);
+  };
+  const handleGenreChange = (e) => {
+    setGenre(e.target.value);
   };
 
   return (
     <>
       <div className="container-fluid p-0">
         <div className="row">
-          <div className="col-lg-8">
+          <div className="col-md-8 ">
             <div className="page_title_box pb-2 d-flex align-items-center justify-content-between">
               <div className="page_title_left">
                 <h3 className="f_s_30 f_w_700 dark_text">Books</h3>
               </div>
             </div>
-            <div className="tabs pb-3">
+            <div className="tabs ">
               <Tabs
                 value={status}
-                onChange={handleChange}
+                onChange={handleStatusChange}
                 textColor="secondary"
                 indicatorColor="secondary"
                 aria-label="secondary tabs example"
@@ -96,7 +105,7 @@ const Book = () => {
               </Tabs>
             </div>
           </div>
-          <div className="col-lg-4 d-flex justify-content-end">
+          <div className="col-md-4 d-flex justify-content-end">
             <div className="serach_field-area theme_bg white_bg d-flex align-items-center">
               <div className="search_inner">
                 <div className="uk-position-relative">
@@ -117,6 +126,55 @@ const Book = () => {
           </div>
         </div>
 
+        <div>
+          <div className="page_title_box pb-2 d-flex align-items-center">
+            <div className="page_title_left">
+              <h5 className="f_s_30 f_w_700 dark_text">Categories</h5>
+            </div>
+          </div>
+          <div className="tabs pb-3">
+            <div
+              className="genre-wrapper"
+              value={genre}
+              onChange={handleGenreChange}
+            >
+              <div className="genre-tab">
+                <input
+                  className="uk-input tab-input"
+                  type="radio"
+                  name="genre"
+                  id="all"
+                  value="-1"
+                />
+                <label htmlFor="all">All</label>
+              </div>
+
+              {genreList.length > 0 && (
+                <>
+                  {genreList.map((props) => {
+                    const { _id, title, image } = props;
+                    return (
+                      <div className="genre-tab">
+                        <input
+                          className="uk-input tab-input"
+                          type="radio"
+                          name="genre"
+                          id={_id}
+                          value={title}
+                        />
+                        <label className="genre-label" htmlFor={_id}>
+                          {title}
+                        </label>
+                        <img src={image.url} alt="" />
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
         <>
           {bookLoading ? (
             <Loading />
@@ -124,7 +182,7 @@ const Book = () => {
             <>
               {bookData.length !== 0 ? (
                 <>
-                  <div className="row mt">
+                  <div className="row mt-3">
                     {bookData.map((props) => {
                       const { _id, BookName, Status, Image } = props;
                       return (
@@ -141,19 +199,21 @@ const Book = () => {
                                   {Status === "1" ? "Available" : "Out"}
                                 </span>
                               </div>
-                              <img
-                                src={Image.url}
-                                alt="book img"
-                                className="d-block mx-auto my-4 book-img"
-                                height="150"
-                              />
-                              <div className="row my-4">
-                                <div className="col">
-                                  <span className="f_w_400 color_text_3 f_s_14 d-block">
-                                    {BookName}
-                                  </span>
+                              <Link to={`/view-book/${_id}`}>
+                                <img
+                                  src={Image.url}
+                                  alt="book img"
+                                  className="d-block mx-auto my-4 book-img"
+                                  height="150"
+                                />
+                                <div className="row my-4">
+                                  <div className="col">
+                                    <span className="f_w_400 color_text_3 f_s_14 d-block">
+                                      {BookName}
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
+                              </Link>
 
                               <div className="book_action_btns d-flex">
                                 <span
@@ -192,7 +252,7 @@ const Book = () => {
                   )}
                 </>
               ) : (
-                <p>No books available</p>
+                <p className="mt-3">No books available</p>
               )}
             </>
           )}

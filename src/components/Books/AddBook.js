@@ -83,8 +83,6 @@ const AddBook = () => {
     getBookData,
   } = useContext(BookContext);
 
-
-
   const [loader, setLoader] = useState(false);
   const [confirmPop, setConfirmPop] = useState(false);
 
@@ -153,7 +151,7 @@ const AddBook = () => {
         Quantity: formValue.qty,
         Genre: formValue.genre,
         Status: formValue.status,
-        Rating: formValue.rating,
+        Rating: formValue.rating ? formValue.rating : "0",
         Language: formValue.language,
         Description: formValue.description,
         Image: image,

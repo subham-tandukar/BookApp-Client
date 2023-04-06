@@ -32,17 +32,18 @@ function BookState(props) {
 
   //   --- to get book list ---
   const [status, setStatus] = useState("-1");
+  const [genre, setGenre] = useState("-1");
   const [bookData, setBookData] = useState([]);
   const [searchBook, setSearchBook] = useState(null);
   const [bookLoading, setBookLoading] = useState(true);
 
   useEffect(() => {
     getBookData();
-  }, [status]);
+  }, [status, genre]);
 
   const getBookData = () => {
     const dataForm = {
-      FetchURL: `${baseURL}/api/getBook?UserID=-1&Status=${status}`,
+      FetchURL: `${baseURL}/api/getBook?UserID=-1&Status=${status}&Genres=${genre}`,
       Type: "GET",
     };
 
@@ -86,29 +87,7 @@ function BookState(props) {
     setIsUploaded(true);
   };
 
-  // to get book info
-  const [bookInfo, setBookInfo] = useState([]);
-  useEffect(() => {
-    infoList();
-  }, [perId]);
 
-  const infoList = () => {
-    const dataForm = {
-      BookID: perId,
-      FLAG: "SI",
-      FetchURL: `${baseURL}/api/book`,
-      Type: "POST",
-    };
-
-    Fetchdata(dataForm).then(function (result) {
-      if (result.StatusCode === 200) {
-        const data = result.Values[0] ? result.Values[0] : "";
-        setBookInfo(data);
-      } else {
-        setBookInfo([]);
-      }
-    });
-  };
 
   // --- to delete book ---
 
@@ -173,6 +152,8 @@ function BookState(props) {
         setImage,
         isUploaded,
         setIsUploaded,
+        genre,
+        setGenre,
 
         handleEdit,
         isEditSubmit,

@@ -20,6 +20,7 @@ import ForgetPassword from "./components/Login/ForgetPassword";
 import BookState from "./components/context/book context folder/bookState";
 import GenreState from "./components/context/genre context folder/genreState";
 import Genre from "./components/Genre/Genre";
+import ViewBook from "./components/Books/ViewBook";
 
 const App = () => {
   const { UserDATA } = useContext(AuthContext);
@@ -47,6 +48,7 @@ const App = () => {
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/book" element={<Book />} />
                     <Route path="/add-book" element={<AddBook />} />
+                    <Route path="/view-book/:id" element={<ViewBook />} />
                     <Route path="/rented-book" element={<RentedBook />} />
                     <Route path="/user" element={<User />} />
                     <Route path="/add-user" element={<AddUser />} />

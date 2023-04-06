@@ -83,7 +83,7 @@ const EditBook = () => {
     getBookData,
   } = useContext(BookContext);
   const [loader, setLoader] = useState(false);
-  console.log("mahima", formValue);
+
   // set image
   const handleImage = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -172,7 +172,7 @@ const EditBook = () => {
         Quantity: formValue.qty,
         Genre: formValue.genre,
         Status: formValue.status,
-        Rating: formValue.rating,
+        Rating: formValue.rating ? formValue.rating : "0",
         Language: formValue.language,
         Description: formValue.description,
         Image: image,

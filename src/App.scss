@@ -2796,22 +2796,119 @@ label {
 
 // ---- Tabs -----
 .MuiTab-root {
-  background-color: transparent !important;
+  background-color: #fff !important;
   margin-right: 1rem !important;
-  border-radius: 16px !important;
+  border-radius: 4px !important;
   color: $primary !important;
   padding: 8px 16px !important;
   min-height: auto !important;
   font-size: 12px !important;
-  border: 1px solid $primary !important;
+  border: 1px solid #e5e5e5 !important;
   transition: $transition !important;
   min-width: auto !important;
+  text-transform: capitalize !important;
 }
 
 .Mui-selected {
-  background-color: #6561a1 !important;
-  color: #fff !important;
+  background-color: #e7e7f9 !important;
+  border: 1px solid $primary !important;
 }
 .MuiTabs-indicator {
   display: none !important;
+}
+
+.genre-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  .genre-tab {
+    display: flex;
+    position: relative;
+    cursor: pointer;
+    margin-right: 1rem;
+
+    .tab-input {
+      border-radius: 4px;
+      cursor: pointer;
+      height: 35px !important;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      transform: translate(-50%, -50%);
+    }
+    .tab-input[type="radio"]:checked {
+      background: #e7e7f9;
+      border-color: $primary !important;
+    }
+    .uk-input:focus,
+    .uk-select:focus,
+    .uk-textarea:focus {
+      outline: 0;
+      background-color: #e7e7f9;
+      color: $primary;
+      border-color: $primary !important;
+    }
+    label {
+      position: relative;
+      z-index: 1;
+      padding: 0 1rem;
+      cursor: pointer;
+      color: $primary;
+      font-size: 12px;
+      text-transform: capitalize;
+    }
+    .genre-label {
+      padding-left: 2rem;
+    }
+    img {
+      width: 20px;
+      position: absolute;
+      object-fit: cover;
+      top: 50%;
+      left: 7px;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+// --------- view-book -------------
+.book-info {
+  img {
+    height: 250px;
+    width: 100%;
+  }
+
+  .white_card {
+    padding: 2rem;
+    padding-top: 0;
+    display: flex;
+    flex-wrap: wrap;
+
+    .box {
+      padding: 1rem;
+      margin-top: 2rem;
+      background: #f5f5ff;
+      border-radius: 4px;
+      margin-right: 2rem;
+      p,
+      h5 {
+        text-align: center;
+      }
+      h5 {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .info-txt{
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    h5{
+      margin: 0;
+    }
+    p{
+      margin-left: 0.5rem;
+    }
+  }
 }
