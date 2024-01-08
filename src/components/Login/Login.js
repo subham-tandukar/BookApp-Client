@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import logo from "../../img/logo.png";
 import img from "../../img/login.gif";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import AuthContext from "../context/auth-context";
 import NavbarContext from "../context/navbar-context";
@@ -69,16 +69,12 @@ const Login = () => {
               theme: "light",
             });
 
-            setLoader(true);
+            setIsSubmit(false);
 
-            setTimeout(() => {
-              setIsSubmit(false);
-              setLoader(false);
-              localStorage.setItem("token", JSON.stringify(postResult));
-              sessionStorage.setItem("token", JSON.stringify(postResult));
-              login(postResult);
-              navigate("/");
-            }, 3000);
+            localStorage.setItem("token", JSON.stringify(postResult));
+            sessionStorage.setItem("token", JSON.stringify(postResult));
+            login(postResult);
+            navigate("/");
           } else {
             toast.error(result.Message, {
               theme: "light",

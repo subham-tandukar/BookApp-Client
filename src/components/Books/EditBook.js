@@ -17,6 +17,8 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import Checkbox from "@mui/material/Checkbox";
 import GenreContext from "../context/genre context folder/genreContext";
 import { MdOutlineAdd } from "react-icons/md";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -64,6 +66,43 @@ const stat = [
   },
 ];
 
+const formats = [
+  "header",
+  "font",
+  "size",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
+  "video",
+];
+
+const modules = {
+  toolbar: [
+    [{ header: "1" }, { header: "2" }, { font: [] }],
+    [{ size: [] }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+    ["link", "image", "video"],
+    ["clean"],
+  ],
+  clipboard: {
+    // toggle to add extra line breaks when pasting HTML:
+    matchVisual: false,
+  },
+};
+
 const EditBook = () => {
   const { baseURL } = useContext(NavbarContext);
   const { genreList } = useContext(GenreContext);
@@ -81,6 +120,8 @@ const EditBook = () => {
     initialValue,
     perId,
     getBookData,
+    value,
+    setValue,
   } = useContext(BookContext);
   const [loader, setLoader] = useState(false);
 
@@ -445,8 +486,14 @@ const EditBook = () => {
                     <p className="errormsg">{formError.status}</p>
                   </div>
                 </div>
-                <div className="col-lg-12">
-                  <div className="common_input mb_15">
+
+                <div className="box_header mt-3">
+                  <div className="main-title">
+                    <h3 className="m-0">Description</h3>
+                  </div>
+                </div>
+                <div className="col-lg-12 mt-3">
+                  {/* <div className="common_input mb_15">
                     <TextField
                       id="outlined-multiline-static"
                       label="Description"
@@ -456,7 +503,13 @@ const EditBook = () => {
                       onChange={handleChange}
                       value={formValue.description}
                     />
-                  </div>
+                  </div> */}
+                  <ReactQuill
+                    modules={modules}
+                    formats={formats}
+                    value={value}
+                    onChange={setValue}
+                  />
                 </div>
 
                 <div className="box_header mt-3">

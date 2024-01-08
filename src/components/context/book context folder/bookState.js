@@ -29,6 +29,7 @@ function BookState(props) {
 
   const [image, setImage] = useState(null);
   const [isUploaded, setIsUploaded] = useState(false);
+  const [value, setValue] = useState("");
 
   //   --- to get book list ---
   const [status, setStatus] = useState("-1");
@@ -79,15 +80,13 @@ function BookState(props) {
       status: data.Status,
       rating: data.Rating,
       language: data.Language,
-      description: data.Description,
       userId: data.UserID,
     });
+    setValue(data.Description);
     setPerId(data._id);
     setImage(data.Image.url);
     setIsUploaded(true);
   };
-
-
 
   // --- to delete book ---
 
@@ -175,6 +174,9 @@ function BookState(props) {
         setIsDelete,
         handleDelete,
         deleteBook,
+
+        value,
+        setValue,
       }}
     >
       {props.children}

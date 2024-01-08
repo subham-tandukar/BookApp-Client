@@ -363,9 +363,9 @@ const Register = () => {
                       onClick={handleSubmit}
                     >
                       {isSubmit ? (
-                        <span>Signing up...</span>
+                        <span>Please wait..</span>
                       ) : (
-                        <span>Sign up</span>
+                        <span>Login</span>
                       )}
                     </button>
                   </form>

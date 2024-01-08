@@ -182,12 +182,12 @@ const Book = () => {
             <>
               {bookData.length !== 0 ? (
                 <>
-                  <div className="row mt-3">
+                  <div className="row">
                     {bookData.map((props) => {
                       const { _id, BookName, Status, Image } = props;
                       return (
                         <div
-                          className="col-md-3 col-sm-6 mt-2"
+                          className="col-md-4 col-lg-3 col-sm-6 mt-2"
                           key={_id}
                           id={_id}
                           data-aos="zoom-in-up"

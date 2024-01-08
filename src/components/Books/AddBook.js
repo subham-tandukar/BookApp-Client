@@ -17,6 +17,8 @@ import Checkbox from "@mui/material/Checkbox";
 import { MdOutlineAdd } from "react-icons/md";
 import GenreContext from "../context/genre context folder/genreContext";
 import { Link } from "react-router-dom";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -64,6 +66,43 @@ const stat = [
   },
 ];
 
+const formats = [
+  "header",
+  "font",
+  "size",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
+  "video",
+];
+
+const modules = {
+  toolbar: [
+    [{ header: "1" }, { header: "2" }, { font: [] }],
+    [{ size: [] }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+    ["link", "image", "video"],
+    ["clean"],
+  ],
+  clipboard: {
+    // toggle to add extra line breaks when pasting HTML:
+    matchVisual: false,
+  },
+};
+
 const AddBook = () => {
   const { baseURL } = useContext(NavbarContext);
   const { genreList } = useContext(GenreContext);
@@ -81,6 +120,8 @@ const AddBook = () => {
     isUploaded,
     setIsUploaded,
     getBookData,
+    value,
+    setValue,
   } = useContext(BookContext);
 
   const [loader, setLoader] = useState(false);
@@ -153,7 +194,7 @@ const AddBook = () => {
         Status: formValue.status,
         Rating: formValue.rating ? formValue.rating : "0",
         Language: formValue.language,
-        Description: formValue.description,
+        Description: value,
         Image: image,
         FetchURL: `${baseURL}/api/book`,
         Type: "POST",
@@ -426,8 +467,14 @@ const AddBook = () => {
                       <p className="errormsg">{formError.status}</p>
                     </div>
                   </div>
-                  <div className="col-lg-12">
-                    <div className="common_input mb_15">
+
+                  <div className="box_header mt-3">
+                    <div className="main-title">
+                      <h3 className="m-0">Description</h3>
+                    </div>
+                  </div>
+                  <div className="col-lg-12 mt-3">
+                    {/* <div className="common_input mb_15">
                       <TextField
                         id="outlined-multiline-static"
                         label="Description"
@@ -437,15 +484,22 @@ const AddBook = () => {
                         onChange={handleChange}
                         value={formValue.description}
                       />
-                    </div>
+                    </div> */}
+
+                    <ReactQuill
+                      modules={modules}
+                      formats={formats}
+                      value={value}
+                      onChange={setValue}
+                    />
                   </div>
 
-                  <div className="box_header mt-3">
+                  <div className="box_header mt-4">
                     <div className="main-title">
                       <h3 className="m-0">Add Image</h3>
                     </div>
                   </div>
-                  <div className="col-lg-12 mt-4">
+                  <div className="col-lg-12 mt-3">
                     <div className="BoxUpload">
                       <div className="image-upload">
                         {!isUploaded ? (

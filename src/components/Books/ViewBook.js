@@ -3,7 +3,9 @@ import { useParams } from "react-router-dom";
 import { Fetchdata } from "../hooks/getData";
 import NavbarContext from "../context/navbar-context";
 import Rating from "@mui/material/Rating";
+import Stack from "@mui/material/Stack";
 import Loading from "../Loading/Loading";
+import RatingStar from "./Rating";
 
 const ViewBook = () => {
   const { baseURL } = useContext(NavbarContext);
@@ -84,12 +86,17 @@ const ViewBook = () => {
                     <div className="uk-width-expand">
                       <div className="white_card">
                         <div className="box">
-                          <Rating
-                            name="half-rating-read"
-                            value={props.Rating}
-                            readOnly
-                            // precision={0.5}
-                          />
+                          {/* <Stack spacing={1} className="mt-2 mb-1">
+                            <Rating
+                              name="half-rating-read"
+                              value={props.Rating}
+                              readOnly
+                              size="small"
+                              // precision={0.5}
+                            />
+                          </Stack> */}
+                          <RatingStar rating={props.Rating} />
+
                           <p>Rating</p>
                         </div>
                         <div className="box">
@@ -101,7 +108,7 @@ const ViewBook = () => {
                             {Language === "np"
                               ? "Nepali"
                               : Language === "en"
-                              ? "Englisg"
+                              ? "English"
                               : Language === "tr"
                               ? "Translated"
                               : "Not mentioned"}
@@ -140,9 +147,12 @@ const ViewBook = () => {
                     </div>
 
                     <h5 className="m-0">Description:</h5>
-                    <p>
-                      {Description ? Description : "No description available."}
-                    </p>
+
+                    {Description ? (
+                      <p dangerouslySetInnerHTML={{ __html: Description }} />
+                    ) : (
+                      "No description available."
+                    )}
                   </div>
                 </div>
               );

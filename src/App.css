@@ -2970,6 +2970,7 @@ label {
   position: relative;
   cursor: pointer;
   margin-right: 1rem;
+  margin-bottom: 2rem;
 }
 .genre-wrapper .genre-tab .tab-input {
   border-radius: 4px;
@@ -3049,4 +3050,9 @@ label {
 }
 .book-info .info-txt p {
   margin-left: 0.5rem;
+}
+
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+  border: 1px solid #e5ecff !important;
 }/*# sourceMappingURL=App.css.map */

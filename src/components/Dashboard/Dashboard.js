@@ -8,6 +8,8 @@ import placeholder from "../../img/placeholder.png";
 import NavbarContext from "../context/navbar-context";
 import { Fetchdata } from "../hooks/getData";
 import Loading from "../Loading/Loading";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 
 const Dashboard = () => {
   const { baseURL } = useContext(NavbarContext);
@@ -56,8 +58,10 @@ const Dashboard = () => {
     Fetchdata(dataForm).then(function (result) {
       if (result.StatusCode === 200) {
         const postResult = result.Values ? result.Values : [];
-        setUserList(postResult);
-        setOriginalList(postResult);
+       
+          setUserList(postResult);
+          setOriginalList(postResult);
+        
         setLoading(false);
       } else {
         setUserList([]);
@@ -136,7 +140,31 @@ const Dashboard = () => {
             </div>
             <div className="white_card_body">
               {loading ? (
-                <Loading />
+                // <Loading />
+                <>
+                  {/* {userList.map(() => ( */}
+                    <div className="single_user_pil d-flex align-items-center justify-content-between">
+                      <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
+                        <div className="thumb_34 mr_15 mt-0 ">
+                          <Skeleton
+                            variant="circular"
+                            animation="wave"
+                            width={34}
+                            height={34}
+                          />
+                        </div>
+                        <span className="f_s_14 f_w_400 text_color_11 w-100">
+                          <Skeleton
+                            variant="text"
+                            animation="wave"
+                            width="100%"
+                            sx={{ fontSize: "1.5rem" }}
+                          />
+                        </span>
+                      </div>
+                    </div>
+                  {/* // ))} */}
+                </>
               ) : (
                 <>
                   {userList.length > 0 ? (
@@ -186,7 +214,7 @@ const Dashboard = () => {
         <div className="col-xl-5 mt-3 mt-xl-0">
           <div className="white_card card_height_100 mb_30 user_crm_wrapper">
             <div className="row">
-              <div className="col-lg-6">
+              <div className="col-lg-6 col-sm-6">
                 <div className="single_crm">
                   <div className="crm_head d-flex align-items-center justify-content-between">
                     <div className="thumb">
@@ -200,7 +228,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6">
+              <div className="col-lg-6 col-sm-6">
                 <div className="single_crm">
                   <div className="crm_head crm_bg_1 d-flex align-items-center justify-content-between">
                     <div className="thumb">
@@ -214,7 +242,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6">
+              <div className="col-lg-6 col-sm-6">
                 <div className="single_crm">
                   <div className="crm_head crm_bg_2 d-flex align-items-center justify-content-between">
                     <div className="thumb">
@@ -228,7 +256,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6">
+              <div className="col-lg-6 col-sm-6">
                 <div className="single_crm">
                   <div className="crm_head crm_bg_3 d-flex align-items-center justify-content-between">
                     <div className="thumb">
