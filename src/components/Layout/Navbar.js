@@ -63,7 +63,7 @@ const Navbar = ({ userDetails, handleMobHam, handleHam }) => {
                 <img src={ham} alt="" style={{ cursor: "pointer" }} />
               </div>
               <div className="header_right d-flex justify-content-between align-items-center">
-                <div className="header_notification_warp d-flex align-items-center">
+                {/* <div className="header_notification_warp d-flex align-items-center">
                   <li>
                     <a className="bell_notification_clicker" href="#">
                       <img src={bell} alt="" />
@@ -168,7 +168,7 @@ const Navbar = ({ userDetails, handleMobHam, handleHam }) => {
                       </div>
                     </div>
                   </li>
-                </div>
+                </div> */}
                 <div className="profile_info">
                   <img src={userDetails.Profile} alt="#" />
                   <div className="profile_info_iner">
@@ -177,7 +177,7 @@ const Navbar = ({ userDetails, handleMobHam, handleHam }) => {
                       <h5 className="uk-text-capitalize">{userDetails.Name}</h5>
                     </div>
                     <div className="profile_info_details">
-                      <a href="#">My Profile </a>
+                      {/* <a href="#">My Profile </a> */}
                       <a onClick={handleSetting}>Settings</a>
                       <a onClick={handleLogout}>Log Out </a>
                     </div>

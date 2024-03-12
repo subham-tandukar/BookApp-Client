@@ -19,6 +19,7 @@ import GenreContext from "../context/genre context folder/genreContext";
 import { Link } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import Heading from "../Layout/Heading";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -208,6 +209,7 @@ const AddBook = () => {
               setConfirmPop(true);
               setIsSubmit(false);
               setFormValue(initialValue);
+              setValue("");
               setIsUploaded(false);
               getBookData();
             }, 1000);
@@ -250,6 +252,7 @@ const AddBook = () => {
   const userLst = () => {
     const dataForm = {
       FLAG: "S",
+      IsVerified: "Y",
       Type: "POST",
       FetchURL: `${baseURL}/api/user`,
     };
@@ -272,17 +275,11 @@ const AddBook = () => {
   return (
     <>
       <div className="container-fluid p-0">
+        <Heading title="Add New Book" />
         <div className="row">
           <div className="col-12">
             <div className="white_card card_height_100 mb_30">
-              <div className="white_card_header">
-                <div className="box_header m-0">
-                  <div className="main-title">
-                    <h3 className="m-0">Add New Book</h3>
-                  </div>
-                </div>
-              </div>
-              <div className="white_card_body">
+              <div className="white_card_body pt-4">
                 <div className="row">
                   <div className="col-lg-6">
                     <div className="common_input mb_15">

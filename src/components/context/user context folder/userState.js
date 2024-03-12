@@ -1,245 +1,145 @@
-// import React, { useContext, useEffect, useState } from "react";
-// import UserContext from "./userContext";
-// import $ from "jquery";
-// import { toast } from "react-toastify";
-// import "../../../../node_modules/react-toastify/dist/ReactToastify.css";
-// import NavbarContext from "../navbar-context";
-// import { Fetchdata } from "../../hooks/getData";
+import React, { useContext, useEffect, useState } from "react";
+import UserContext from "./userContext";
+import $ from "jquery";
+import { toast } from "react-toastify";
+import "../../../../node_modules/react-toastify/dist/ReactToastify.css";
+import NavbarContext from "../navbar-context";
+import { Fetchdata } from "../../hooks/getData";
 
-// function UserState(props) {
-//   const { baseURL } = useContext(NavbarContext);
+function UserState(props) {
+  const { baseURL } = useContext(NavbarContext);
 
-//   const initialValue = {
-//     name: "",
-//     email: "",
-//     password: "",
-//     roleName: "",
-//   };
+  const [loading, setLoading] = useState(true);
+  const [sortby, setSortby] = useState("");
+  const [status, setStatus] = useState("-1");
 
-//   const [inputData, setInputData] = useState(initialValue);
+  //  to search -------
+  const [searchValue, setSearchValue] = useState("");
+  const [search, setSearch] = useState("");
+  const [isSubmit, setIsSubmit] = useState(false);
 
-//   const [reload, setReload] = useState(false);
-//   const [formError, setFormError] = useState({});
-//   const [isSubmit, setIsSubmit] = useState(false);
-//   const [loading, setLoading] = useState(true);
+  // Pagination
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
-//   const [typeFile, setTypeFile] = useState("");
-//   const [image, setImage] = useState("");
+  // get the user list-----------------------------------
+  const [userList, setUserList] = useState([]);
 
-//   const [userData, setUserData] = useState([]);
-//   const [originalList, setOriginalList] = useState(null);
-//   console.log("get user data", userData);
+  useEffect(() => {
+    userLst();
+  }, [sortby, status, search, page, pageSize]);
 
-//   // add user-----------------------------------
-//   const addUser = () => {
-//     const dataForm = {
-//       name: inputData.name,
-//       email: inputData.email,
-//       password: inputData.password,
-//       roleName: inputData.roleName,
-//       // image: image,
-//       FetchURL: `${baseURL}/api/addUser`,
-//       Type: "POST",
-//     };
-//     console.log(dataForm);
-//     Fetchdata(dataForm).then(function (result) {
-//       console.log("result", result);
-//       if (result.StatusCode === 200) {
-//         toast.success("User added sucessfully", {
-//           theme: "light",
-//         });
-//         setReload(!reload);
-//         $(".add-user-bg").fadeOut(300);
-//         $(".add-user").slideUp(500);
-//       } else {
-//         toast.error(result.Message, {
-//           theme: "light",
-//         });
-//       }
-//     });
-//   };
+  const userLst = () => {
+    const dataForm = {
+      Type: "GET",
+      FetchURL: `${baseURL}/api/getUser?isVerified=${status}&sortby=${sortby}&page=${page}&pageSize=${pageSize}&search=${search}`,
+    };
 
-//   // get user-----------------------------------
-//   useEffect(() => {
-//     getUserData();
-//   }, [reload]);
+    Fetchdata(dataForm).then(function (result) {
+      if (result.StatusCode === 200) {
+        const postPagination = result.Pagination ? result.Pagination : "";
+        const postResult = result.Values ? result.Values : "";
+        setUserList(postResult);
+        setLoading(false);
+        setIsSubmit(false);
 
-//   const getUserData = () => {
-//     const dataForm = {
-//       FetchURL: `${baseURL}/api/getUserData`,
-//       Type: "GET",
-//     };
+        // Update total number of items
+        const totalItems = postPagination.total || 0;
+        setTotalItems(totalItems);
 
-//     Fetchdata(dataForm).then(function (result) {
-//       console.log("result", result);
-//       if (result.StatusCode === 200) {
-//         const postResult = result.UserData ? result.UserData : "";
-//         setUserData(postResult);
-//         setOriginalList(postResult);
-//         setLoading(false);
-//       } else {
-//         setUserData([]);
-//         setLoading(false);
-//       }
-//     });
-//   };
+        // Calculate total number of pages based on total items and page size
+        const calculatedTotalPages = Math.ceil(totalItems / pageSize);
+        setTotalPages(calculatedTotalPages);
+      } else {
+        setUserList([]);
+        setLoading(false);
+        setIsSubmit(false);
+      }
+    });
+  };
 
-//   // view user-----------------------------------
+  const [perId, setPerId] = useState(null);
 
-//   const [viewID, setViewId] = useState("");
-//   const [view, setView] = useState([]);
+  // delete user-----------------------------------
 
-//   const handleView = (data) => {
-//     setViewId(data._id);
-//     $(".view-user-bg").fadeIn(300);
-//     $(".view-user").slideDown(500);
-//   };
+  const [isDelete, setIsDelete] = useState(false);
+  const [userDelete, setUserDelete] = useState("");
 
-//   const id = viewID;
+  const handleDelete = (data) => {
+    setPerId(data._id);
+    setUserDelete(data.Name);
+    $(".deletePopBg").fadeIn(300);
+    $(".deletePop").slideDown(500);
+  };
 
-//   const viewData = () => {
-//     const dataForm = {
-//       FetchURL: `${baseURL}/getUser/${id}`,
-//       Type: "GET",
-//     };
+  const deleteUser = () => {
+    setIsDelete(true);
+    const dataForm = {
+      UserID: perId,
+      FLAG: "D",
+      FetchURL: `${baseURL}/api/user`,
+      Type: "POST",
+    };
 
-//     Fetchdata(dataForm).then(function (result) {
-//       console.log("result", result);
-//       if (result.StatusCode === 200) {
-//         const postResult = result.UserList[0] ? result.UserList[0] : "";
-//         setView(postResult);
-//         setLoading(false);
-//       } else {
-//         setView([]);
-//         setLoading(false);
-//       }
-//     });
-//   };
+    Fetchdata(dataForm)
+      .then(function (result) {
+        if (result.StatusCode === 200) {
+          $(".deletePopBg").fadeOut(300);
+          $(".deletePop").slideUp(500);
+          toast.success(`User ${userDelete} deleted sucessfully`, {
+            theme: "light",
+          });
 
-//   useEffect(() => {
-//     viewData();
-//   }, [id, reload]);
+          setIsDelete(false);
+          userLst();
+        } else {
+          toast.error(result.Message, {
+            theme: "light",
+          });
+          setIsDelete(false);
+        }
+      })
+      .catch(() => {
+        setIsDelete(false);
+      });
+  };
 
-//   // edit user-----------------------------------
-//   const [perEditSubmit, setPerEditSubmit] = useState(false);
-//   const [perID, setPerId] = useState(null);
-//   const [userEdit, setUserEdit] = useState("");
+  return (
+    <UserContext.Provider
+      value={{
+        loading,
+        setLoading,
+        sortby,
+        setSortby,
+        status,
+        setStatus,
+        searchValue,
+        setSearchValue,
+        search,
+        setSearch,
+        isSubmit,
+        setIsSubmit,
+        page,
+        setPage,
+        pageSize,
+        setPageSize,
+        totalItems,
+        setTotalItems,
+        totalPages,
+        setTotalPages,
+        userList,
+        setUserList,
+        userLst,
+        handleDelete,
+        deleteUser,
+        isDelete,
+      }}
+    >
+      {props.children}
+    </UserContext.Provider>
+  );
+}
 
-//   const handleEdit = (data) => {
-//     setPerId(data._id);
-//     setUserEdit(data.name);
-//     $(".edit-user-bg").fadeIn(300);
-//     $(".edit-user").slideDown(500);
-//     setInputData({
-//       name: data.name,
-//       email: data.email,
-//       password: data.password,
-//       roleName: data.roleName,
-//     });
-//   };
-
-//   const editid = perID;
-
-//   const editUser = () => {
-//     const dataForm = {
-//       name: inputData.name,
-//       email: inputData.email,
-//       password: inputData.password,
-//       roleName: inputData.roleName,
-//       FetchURL: `${baseURL}/updateUser/${editid}`,
-//       Type: "PATCH",
-//     };
-
-//     Fetchdata(dataForm).then(function (result) {
-//       console.log("result", result);
-//       if (result.StatusCode === 200) {
-//         toast.success(`User ${userEdit} updated sucessfully`, {
-//           theme: "light",
-//         });
-//         setReload(!reload);
-//         $(".edit-user-bg").fadeOut(300);
-//         $(".edit-user").slideUp(500);
-//       } else {
-//         toast.error(result.Message, {
-//           theme: "light",
-//         });
-//       }
-//     });
-//   };
-
-//   // delete user-----------------------------------
-//   const [deleteID, setDeleteId] = useState(null);
-//   const [userDelete, setUserDelete] = useState("");
-
-//   const handleDelete = (data) => {
-//     setDeleteId(data._id);
-//     setUserDelete(data.name);
-//     $(".delete-user-bg").fadeIn(300);
-//     $(".delete-user").slideDown(500);
-//   };
-
-//   const deleteid = deleteID;
-
-//   const deleteUser = () => {
-//     const dataForm = {
-//       FetchURL: `${baseURL}/deleteUser/${deleteid}`,
-//       Type: "DELETE",
-//     };
-
-//     Fetchdata(dataForm).then(function (result) {
-//       console.log("result", result);
-//       if (result.StatusCode === 200) {
-//         toast.success(`User ${userDelete} deleted sucessfully`, {
-//           theme: "light",
-//         });
-//         setReload(!reload);
-//         $(".delete-user-bg").fadeOut(300);
-//         $(".delete-user").slideUp(500);
-//         getUserData();
-//       } else {
-//         toast.error(result.Message, {
-//           theme: "light",
-//         });
-//       }
-//     });
-//   };
-
-//   return (
-//     <UserContext.Provider
-//       value={{
-//         inputData,
-//         setInputData,
-//         initialValue,
-//         formError,
-//         setFormError,
-//         isSubmit,
-//         setIsSubmit,
-//         addUser,
-//         userData,
-//         setUserData,
-//         setReload,
-//         reload,
-//         perEditSubmit,
-//         setPerEditSubmit,
-//         handleEdit,
-//         handleView,
-//         view,
-//         loading,
-//         editUser,
-//         handleDelete,
-//         deleteUser,
-//         originalList,
-//         setOriginalList,
-
-//         typeFile,
-//         setTypeFile,
-//         image,
-//         setImage,
-//       }}
-//     >
-//       {props.children}
-//     </UserContext.Provider>
-//   );
-// }
-
-// export default UserState;
+export default UserState;

@@ -95,8 +95,11 @@ const ForgetPassword = () => {
   }, [formError]);
 
   // --- for otp verification ---
-  function handleOtpChange(otpData) {
-    setOtpData(otpData);
+  function handleOtpChange(data) {
+    setOtpData(data);
+    if (otpData.length === 5) {
+      setIsVerify(true);
+    }
   }
 
   const handleVerify = (e) => {

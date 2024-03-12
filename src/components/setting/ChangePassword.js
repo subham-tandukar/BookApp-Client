@@ -7,6 +7,7 @@ import $ from "jquery";
 import NavbarContext from "../context/navbar-context";
 import ChangePasswordPop from "./ChangePasswordPopup";
 import Loading from "../Loading/Loading";
+import TextField from "@mui/material/TextField";
 
 const ChangePassword = ({
   changePassPopup,
@@ -97,6 +98,7 @@ const ChangePassword = ({
             toast.error(result.Message, {
               theme: "light",
             });
+            setIsSubmit(false);
           }
         })
         .catch((result) => {
@@ -128,39 +130,31 @@ const ChangePassword = ({
             <form className="form-padding">
               <div className="row text-start">
                 <div className="form-group">
-                  <label htmlFor="oldpass" style={{ fontSize: "12px" }}>
-                    Old Password <sup>*</sup>
-                  </label>
-                  <input
-                    id="oldpass"
-                    style={{ fontSize: "13px" }}
-                    type="password"
-                    className="form-control form-control-sm "
-                    name="oldPassword"
-                    value={formValues.oldPassword}
-                    onChange={handleChange}
-                    autoComplete="off"
-                    required
-                  />
-                  <p className="errormsg">{formErrors.oldPassword}</p>
+                  <div className="common_input mb_15">
+                    <TextField
+                      id="outlined-basic"
+                      label="Old Password*"
+                      variant="outlined"
+                      size="small"
+                      name="oldPassword"
+                      onChange={handleChange}
+                      value={formValues.oldPassword}
+                    />
+                    <p className="errormsg">{formErrors.oldPassword}</p>
+                  </div>
                 </div>
               </div>
 
               <div className="row text-start mt-3">
-                <div className="form-group">
-                  <label htmlFor="newpass" style={{ fontSize: "12px" }}>
-                    New Password <sup>*</sup>
-                  </label>
-                  <input
-                    id="newpass"
-                    style={{ fontSize: "13px" }}
-                    type="password"
-                    className="form-control form-control-sm "
+                <div className="common_input mb_15">
+                  <TextField
+                    id="outlined-basic"
+                    label="New Password*"
+                    variant="outlined"
+                    size="small"
                     name="newPassword"
-                    value={formValues.newPassword}
                     onChange={handleChange}
-                    autoComplete="off"
-                    required
+                    value={formValues.newPassword}
                   />
                   <p className="errormsg">{formErrors.newPassword}</p>
                 </div>

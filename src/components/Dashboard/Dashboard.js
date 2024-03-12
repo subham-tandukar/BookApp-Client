@@ -4,15 +4,19 @@ import businessman from "../../img/icon/businessman.svg";
 import customer from "../../img/icon/customer.svg";
 import sqr from "../../img/icon/sqr.svg";
 import infographic from "../../img/icon/infographic.svg";
-import placeholder from "../../img/placeholder.png";
+import clock from "../../img/clock.gif";
 import NavbarContext from "../context/navbar-context";
 import { Fetchdata } from "../hooks/getData";
 import Loading from "../Loading/Loading";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
+import { Link } from "react-router-dom";
+import BookContext from "../context/book context folder/bookContext";
+import Heading from "../Layout/Heading";
 
 const Dashboard = () => {
   const { baseURL } = useContext(NavbarContext);
+  const { setStatus } = useContext(BookContext);
 
   // get the count-----------------------------------
   const [count, setCount] = useState([]);
@@ -58,10 +62,10 @@ const Dashboard = () => {
     Fetchdata(dataForm).then(function (result) {
       if (result.StatusCode === 200) {
         const postResult = result.Values ? result.Values : [];
-       
-          setUserList(postResult);
-          setOriginalList(postResult);
-        
+
+        setUserList(postResult);
+        setOriginalList(postResult);
+
         setLoading(false);
       } else {
         setUserList([]);
@@ -96,11 +100,7 @@ const Dashboard = () => {
     <div className="container-fluid p-0">
       <div className="row">
         <div className="col-12">
-          <div className="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-            <div className="page_title_left d-flex align-items-center">
-              <h3 className="f_s_25 f_w_700 dark_text mr_30">Dashboard</h3>
-            </div>
-          </div>
+          <Heading title="Dashboard" />
         </div>
       </div>
       <div className="row">
@@ -108,12 +108,12 @@ const Dashboard = () => {
           <div className="white_card card_height_100 mb_30">
             <div className="white_card_header">
               <div className="row align-items-center uk-flex-wrap">
-                <div className="col-sm-4">
-                  <div className="main-title">
-                    <h3 className="m-0">New Member</h3>
-                  </div>
+                {/* <div className="col-sm-4"> */}
+                <div className="main-title">
+                  <h3 className="m-0">New Members</h3>
                 </div>
-                <div className="col-sm-8 dash-search">
+                {/* </div> */}
+                {/* <div className="col-sm-8 dash-search">
                   <div className="row justify-content-end">
                     <div className="col-lg-8 d-flex justify-content-end">
                       <div className="serach_field-area theme_bg d-flex align-items-center">
@@ -135,7 +135,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="white_card_body">
@@ -143,26 +143,106 @@ const Dashboard = () => {
                 // <Loading />
                 <>
                   {/* {userList.map(() => ( */}
-                    <div className="single_user_pil d-flex align-items-center justify-content-between">
-                      <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
-                        <div className="thumb_34 mr_15 mt-0 ">
-                          <Skeleton
-                            variant="circular"
-                            animation="wave"
-                            width={34}
-                            height={34}
-                          />
-                        </div>
-                        <span className="f_s_14 f_w_400 text_color_11 w-100">
-                          <Skeleton
-                            variant="text"
-                            animation="wave"
-                            width="100%"
-                            sx={{ fontSize: "1.5rem" }}
-                          />
-                        </span>
+                  <div className="single_user_pil d-flex align-items-center justify-content-between">
+                    <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
+                      <div className="thumb_34 mr_15 mt-0 ">
+                        <Skeleton
+                          variant="circular"
+                          animation="wave"
+                          width={34}
+                          height={34}
+                        />
                       </div>
+                      <span className="f_s_14 f_w_400 text_color_11 w-100">
+                        <Skeleton
+                          variant="text"
+                          animation="wave"
+                          width="100%"
+                          sx={{ fontSize: "1.5rem" }}
+                        />
+                      </span>
                     </div>
+                  </div>
+                  <div className="single_user_pil d-flex align-items-center justify-content-between">
+                    <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
+                      <div className="thumb_34 mr_15 mt-0 ">
+                        <Skeleton
+                          variant="circular"
+                          animation="wave"
+                          width={34}
+                          height={34}
+                        />
+                      </div>
+                      <span className="f_s_14 f_w_400 text_color_11 w-100">
+                        <Skeleton
+                          variant="text"
+                          animation="wave"
+                          width="100%"
+                          sx={{ fontSize: "1.5rem" }}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                  <div className="single_user_pil d-flex align-items-center justify-content-between">
+                    <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
+                      <div className="thumb_34 mr_15 mt-0 ">
+                        <Skeleton
+                          variant="circular"
+                          animation="wave"
+                          width={34}
+                          height={34}
+                        />
+                      </div>
+                      <span className="f_s_14 f_w_400 text_color_11 w-100">
+                        <Skeleton
+                          variant="text"
+                          animation="wave"
+                          width="100%"
+                          sx={{ fontSize: "1.5rem" }}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                  <div className="single_user_pil d-flex align-items-center justify-content-between">
+                    <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
+                      <div className="thumb_34 mr_15 mt-0 ">
+                        <Skeleton
+                          variant="circular"
+                          animation="wave"
+                          width={34}
+                          height={34}
+                        />
+                      </div>
+                      <span className="f_s_14 f_w_400 text_color_11 w-100">
+                        <Skeleton
+                          variant="text"
+                          animation="wave"
+                          width="100%"
+                          sx={{ fontSize: "1.5rem" }}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                  <div className="single_user_pil d-flex align-items-center justify-content-between">
+                    <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
+                      <div className="thumb_34 mr_15 mt-0 ">
+                        <Skeleton
+                          variant="circular"
+                          animation="wave"
+                          width={34}
+                          height={34}
+                        />
+                      </div>
+                      <span className="f_s_14 f_w_400 text_color_11 w-100">
+                        <Skeleton
+                          variant="text"
+                          animation="wave"
+                          width="100%"
+                          sx={{ fontSize: "1.5rem" }}
+                        />
+                      </span>
+                    </div>
+                  </div>
                   {/* // ))} */}
                 </>
               ) : (
@@ -215,59 +295,72 @@ const Dashboard = () => {
           <div className="white_card card_height_100 mb_30 user_crm_wrapper">
             <div className="row">
               <div className="col-lg-6 col-sm-6">
-                <div className="single_crm">
-                  <div className="crm_head d-flex align-items-center justify-content-between">
-                    <div className="thumb">
-                      <img src={businessman} alt="" />
+                <div className="single_crm user-box">
+                  <Link to="/user">
+                    <div className="crm_head d-flex align-items-center justify-content-between">
+                      <div className="thumb">
+                        <img src={businessman} alt="" />
+                      </div>
+                      <i className="fas fa-ellipsis-h f_s_11 white_text"></i>
                     </div>
-                    <i className="fas fa-ellipsis-h f_s_11 white_text"></i>
-                  </div>
-                  <div className="crm_body">
-                    <h4>{totalUsers}</h4>
-                    <p>User Registrations</p>
-                  </div>
+                    <div className="crm_body">
+                      <h4>{totalUsers >= 0 ? totalUsers : "..."}</h4>
+                      <p>
+                        User {totalUsers > 1 ? "Registrations" : "Registration"}
+                      </p>
+                    </div>
+                  </Link>
                 </div>
               </div>
               <div className="col-lg-6 col-sm-6">
-                <div className="single_crm">
-                  <div className="crm_head crm_bg_1 d-flex align-items-center justify-content-between">
-                    <div className="thumb">
-                      <img src={customer} alt="" />
+                <div className="single_crm total-book-box">
+                  <Link to="/book" onClick={() => setStatus("-1")}>
+                    <div className="crm_head crm_bg_1 d-flex align-items-center justify-content-between">
+                      <div className="thumb">
+                        <img src={customer} alt="" />
+                      </div>
+                      <i className="fas fa-ellipsis-h f_s_11 white_text"></i>
                     </div>
-                    <i className="fas fa-ellipsis-h f_s_11 white_text"></i>
-                  </div>
-                  <div className="crm_body">
-                    <h4>{totalBooks}</h4>
-                    <p>Total No. of Books</p>
-                  </div>
+                    <div className="crm_body">
+                      <h4>{totalBooks >= 0 ? totalBooks : "..."}</h4>
+                      <p>Total No. of {totalBooks > 1 ? "Books" : "Book"}</p>
+                    </div>
+                  </Link>
                 </div>
               </div>
               <div className="col-lg-6 col-sm-6">
-                <div className="single_crm">
-                  <div className="crm_head crm_bg_2 d-flex align-items-center justify-content-between">
-                    <div className="thumb">
-                      <img src={infographic} alt="" />
+                <div
+                  className="single_crm available-book-box"
+                  onClick={() => setStatus("1")}
+                >
+                  <Link to="/book">
+                    <div className="crm_head crm_bg_2 d-flex align-items-center justify-content-between">
+                      <div className="thumb">
+                        <img src={infographic} alt="" />
+                      </div>
+                      <i className="fas fa-ellipsis-h f_s_11 white_text"></i>
                     </div>
-                    <i className="fas fa-ellipsis-h f_s_11 white_text"></i>
-                  </div>
-                  <div className="crm_body">
-                    <h4>{booksAvailable}</h4>
-                    <p>Books Available</p>
-                  </div>
+                    <div className="crm_body">
+                      <h4>{booksAvailable >= 0 ? booksAvailable : "..."}</h4>
+                      <p>{booksAvailable > 1 ? "Books" : "Book"} Available</p>
+                    </div>
+                  </Link>
                 </div>
               </div>
               <div className="col-lg-6 col-sm-6">
-                <div className="single_crm">
-                  <div className="crm_head crm_bg_3 d-flex align-items-center justify-content-between">
-                    <div className="thumb">
-                      <img src={sqr} alt="" />
+                <div className="single_crm no-book-box">
+                  <Link to="/book" onClick={() => setStatus("2")}>
+                    <div className="crm_head crm_bg_3 d-flex align-items-center justify-content-between">
+                      <div className="thumb">
+                        <img src={sqr} alt="" />
+                      </div>
+                      <i className="fas fa-ellipsis-h f_s_11 white_text"></i>
                     </div>
-                    <i className="fas fa-ellipsis-h f_s_11 white_text"></i>
-                  </div>
-                  <div className="crm_body">
-                    <h4>{bookOut}</h4>
-                    <p>Books Out</p>
-                  </div>
+                    <div className="crm_body">
+                      <h4>{bookOut >= 0 ? bookOut : "..."}</h4>
+                      <p>{bookOut > 1 ? "Books" : "Book"} Out</p>
+                    </div>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="row">
         <div className="col-lg-12">
           <div className="footer_iner text-center">
-            <p>2023 © HTD Read & Lead | All Rights Reserved.</p>
+            <p>2024 © HTD Read & Lead | All Rights Reserved.</p>
           </div>
         </div>
       </div>

@@ -68,21 +68,21 @@ const Sidebar = ({ handleMobHam }) => {
                   Add Book Genre
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink to="/borrowed-book" onClick={handleMobHam}>
                   Borrowed Books
                 </NavLink>
-              </li>
+              </li> */}
               <li>
                 <NavLink to="/rented-book" onClick={handleMobHam}>
                   Rented Books
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink to="/read-book" onClick={handleMobHam}>
                   Read Books
                 </NavLink>
-              </li>
+              </li> */}
             </ul>
           </li>
           <li className="">
@@ -100,14 +100,14 @@ const Sidebar = ({ handleMobHam }) => {
                   Users List
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink to="/add-user" onClick={handleMobHam}>
                   Add New User
                 </NavLink>
-              </li>
+              </li> */}
             </ul>
           </li>
-          <li className="">
+          {/* <li className="">
             <NavLink to="/order" onClick={handleMobHam}>
               <div className="nav_icon_small">
                 <img src={order} alt="" />
@@ -116,7 +116,7 @@ const Sidebar = ({ handleMobHam }) => {
                 <span>Order</span>
               </div>
             </NavLink>
-          </li>
+          </li> */}
         </MetisMenu>
       </div>
     </>

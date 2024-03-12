@@ -23,7 +23,9 @@ const DeletePop = ({ title, handleDelete, loading }) => {
           </div>
           <div className="popup-footer">
             <button
-              className={`uk-button ${loading ? "disable-cursor" : ""}`}
+              className={`uk-button delete-btn ${
+                loading ? "disable-cursor" : ""
+              }`}
               onClick={handleDelete}
             >
               {loading ? "Deleting..." : "Delete"}

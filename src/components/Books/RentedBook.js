@@ -10,6 +10,7 @@ import "aos/dist/aos.css";
 import search from "../../img/icon/icon_search.svg";
 import GenreContext from "../context/genre context folder/genreContext";
 import { Link } from "react-router-dom";
+import Heading from "../Layout/Heading";
 
 const RentedBook = () => {
   const { baseURL } = useContext(NavbarContext);
@@ -101,13 +102,9 @@ const RentedBook = () => {
   return (
     <>
       <div className="container-fluid p-0">
-        <div className="row">
+        <Heading title="Rented Books" />
+        <div className="row align-items-center">
           <div className="col-md-8 ">
-            <div className="page_title_box pb-2 d-flex align-items-center justify-content-between">
-              <div className="page_title_left">
-                <h3 className="f_s_30 f_w_700 dark_text">Books</h3>
-              </div>
-            </div>
             <div className="tabs ">
               <Tabs
                 value={status}

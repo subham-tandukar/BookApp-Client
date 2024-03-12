@@ -123,8 +123,11 @@ const Register = () => {
   }, [formError]);
 
   // --- for otp verification ---
-  function handleOtpChange(otpData) {
-    setOtpData(otpData);
+  function handleOtpChange(data) {
+    setOtpData(data);
+    if (otpData.length === 5) {
+      setIsVerify(true);
+    }
   }
 
   const handleVerify = (e) => {
@@ -256,7 +259,7 @@ const Register = () => {
                           {!isUploaded ? (
                             <>
                               <label
-                                htmlFor="upload-input "
+                                htmlFor="upload-image"
                                 style={{ paddingLeft: "0" }}
                               >
                                 <img
@@ -269,6 +272,7 @@ const Register = () => {
                                     borderRadius: "50%",
                                   }}
                                 />
+                                <span className="img-txt">Upload Photo</span>
                               </label>
 
                               <input
@@ -276,12 +280,12 @@ const Register = () => {
                                 name="bookImg"
                                 accept=".jpg,.jpeg,.gif,.png,.mov,.mp4"
                                 onChange={handleImage}
-                                id="upload-input"
+                                id="upload-image"
                               />
                             </>
                           ) : (
                             <div className="ImagePreview">
-                              <img
+                              {/* <img
                                 className="close-icon"
                                 src={CloseIcon}
                                 alt="CloseIcon"
@@ -289,7 +293,7 @@ const Register = () => {
                                   setIsUploaded(false);
                                   setImage(null);
                                 }}
-                              />
+                              /> */}
 
                               <img
                                 id="uploaded-image"
@@ -297,12 +301,18 @@ const Register = () => {
                                 draggable={false}
                                 alt="uploaded-img"
                               />
+                              <span
+                                onClick={() => {
+                                  setIsUploaded(false);
+                                  setImage(null);
+                                }}
+                                className="img-txt"
+                              >
+                                Remove Photo
+                              </span>
                             </div>
                           )}
                         </div>
-                      </div>
-                      <div>
-                        <h5>{!isUploaded && "Upload Photo"}</h5>
                       </div>
                     </div>
                     <div className="form-wrapper">

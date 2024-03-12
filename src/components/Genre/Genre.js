@@ -11,6 +11,7 @@ import { Fetchdata } from "../hooks/getData";
 import NavbarContext from "../context/navbar-context";
 import Loading from "../Loading/Loading";
 import search from "../../img/icon/icon_search.svg";
+import Heading from "../Layout/Heading";
 
 const Genre = () => {
   const {
@@ -189,17 +190,12 @@ const Genre = () => {
   return (
     <>
       <div className="container-fluid p-0">
+        <Heading title="Add Genre" />
         <div className="row">
           <div className="col-12">
             <div className="white_card card_height_100 mb_30">
-              <div className="white_card_header pb-0">
-                <div className="box_header m-0">
-                  <div className="main-title">
-                    <h3 className="m-0 ">Add Genre</h3>
-                  </div>
-                </div>
-              </div>
-              <div className="white_card_body">
+              
+              <div className="white_card_body pt-3">
                 <div className="row">
                   <div className="d-flex uk-flex-middle uk-flex-wrap uk-flex-between">
                     <div className=" d-flex uk-flex-middle uk-flex-wrap">
