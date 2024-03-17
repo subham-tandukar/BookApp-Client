@@ -169,17 +169,27 @@ const Navbar = ({ userDetails, handleMobHam, handleHam }) => {
                     </div>
                   </li>
                 </div> */}
-                <div className="profile_info">
-                  <img src={userDetails.Profile} alt="#" />
-                  <div className="profile_info_iner">
-                    <div className="profile_author_name">
-                      <p>{timeOfDay}</p>
-                      <h5 className="uk-text-capitalize">{userDetails.Name}</h5>
-                    </div>
-                    <div className="profile_info_details">
-                      {/* <a href="#">My Profile </a> */}
-                      <a onClick={handleSetting}>Settings</a>
-                      <a onClick={handleLogout}>Log Out </a>
+
+                <div className="d-flex gap-3 align-items-center">
+                  <div className="loggedin-user">
+                    Logged in as:
+                    <span>{userDetails.Email}</span>
+                  </div>
+
+                  <div className="profile_info">
+                    <img src={userDetails.Profile} alt="#" />
+                    <div className="profile_info_iner">
+                      <div className="profile_author_name">
+                        <p>{timeOfDay}</p>
+                        <h5 className="uk-text-capitalize">
+                          {userDetails.Name}
+                        </h5>
+                      </div>
+                      <div className="profile_info_details">
+                        {/* <a href="#">My Profile </a> */}
+                        <a onClick={handleSetting}>Settings</a>
+                        <a onClick={handleLogout}>Log Out </a>
+                      </div>
                     </div>
                   </div>
                 </div>

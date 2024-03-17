@@ -69,12 +69,16 @@ const Login = () => {
               theme: "light",
             });
 
-            setIsSubmit(false);
+            setLoader(true);
 
-            localStorage.setItem("token", JSON.stringify(postResult));
-            sessionStorage.setItem("token", JSON.stringify(postResult));
-            login(postResult);
-            navigate("/");
+            setTimeout(() => {
+              setIsSubmit(false);
+              setLoader(false);
+              localStorage.setItem("token", JSON.stringify(postResult));
+              sessionStorage.setItem("token", JSON.stringify(postResult));
+              login(postResult);
+              navigate("/");
+            }, 3000);
           } else {
             toast.error(result.Message, {
               theme: "light",
@@ -111,7 +115,7 @@ const Login = () => {
       <WelcomePage />
       <Toast />
 
-      <div className="login-form">
+      <div className="login-form my-form">
         <div className="wrapper mb_30 ">
           <div className="row justify-content-center align-items-center">
             <div className="col-md-6">

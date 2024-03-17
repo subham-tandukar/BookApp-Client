@@ -228,7 +228,7 @@ const ForgetPassword = () => {
         msg="Password changed successfully! Please login to continue"
         link="/login"
       />
-      <div className="login-form">
+      <div className="login-form my-form">
         <div className="wrapper mb_30 ">
           <div className="row justify-content-center align-items-center">
             <div className="col-md-6">

@@ -12,13 +12,13 @@ function BookState(props) {
   const initialValue = {
     bookName: "",
     auther: "",
-    ageGrp: "",
+    ageGrp: "4-8",
     page: "",
     qty: "",
     genre: [],
-    status: "",
+    status: "1",
     rating: "",
-    language: "",
+    language: "en",
     description: "",
     userId: "-1",
   };
@@ -26,6 +26,7 @@ function BookState(props) {
   const [formValue, setFormValue] = useState(initialValue);
   const [formError, setFormError] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
+  const [genreValue, setGenreValue] = useState([]);
 
   const [image, setImage] = useState(null);
   const [isUploaded, setIsUploaded] = useState(false);
@@ -76,7 +77,6 @@ function BookState(props) {
       ageGrp: data.AgeGroup,
       page: data.Page,
       qty: data.Quantity,
-      genre: data.Genre,
       status: data.Status,
       rating: data.Rating,
       language: data.Language,
@@ -86,6 +86,7 @@ function BookState(props) {
     setPerId(data._id);
     setImage(data.Image.url);
     setIsUploaded(true);
+    setGenreValue(data.Genre);
   };
 
   // --- to delete book ---
@@ -137,6 +138,68 @@ function BookState(props) {
       });
   };
 
+  // bulk delete
+
+  const [bulkDelete, setBulkDelete] = useState(false);
+  const [isBulkDelete, setIsBulkDelete] = useState(false);
+  const [bulkBook, setBulkBook] = useState([]);
+
+  const filteredBook = bookData.map((item) => item._id);
+
+  useEffect(() => {
+    if (bulkDelete) {
+      setBulkBook(filteredBook);
+    }
+  }, [status, genre, bulkDelete, bookData]);
+
+  const handleBulkDelete = () => {
+    $(".deletePopBg").fadeIn(300);
+    $(".deletePop").slideDown(500);
+  };
+
+  const deleteBulkBook = () => {
+    setIsBulkDelete(true);
+    const dataForm = {
+      BulkBookID: bulkBook,
+      FLAG: "BD",
+      FetchURL: `${baseURL}/api/book`,
+      Type: "POST",
+    };
+
+    Fetchdata(dataForm)
+      .then(function (result) {
+        if (result.StatusCode === 200) {
+          $(".deletePopBg").fadeOut(300);
+          $(".deletePop").slideUp(500);
+          toast.success(
+            `${result.DeletedCount} ${
+              result.DeletedCount > 1 ? "Books" : "Book"
+            } deleted sucessfully`,
+            {
+              theme: "light",
+            }
+          );
+          // const bookElement = document.getElementById(perId);
+          // bookElement.classList.add(
+          //   "uk-animation-scale-up",
+          //   "uk-animation-reverse"
+          // );
+
+          getBookData();
+          setIsBulkDelete(false);
+          setBulkBook([]);
+        } else {
+          toast.error(result.Message, {
+            theme: "light",
+          });
+          setIsBulkDelete(false);
+        }
+      })
+      .catch(() => {
+        setIsBulkDelete(false);
+      });
+  };
+
   return (
     <BookContext.Provider
       value={{
@@ -177,6 +240,18 @@ function BookState(props) {
 
         value,
         setValue,
+        genreValue,
+        setGenreValue,
+
+        bulkDelete,
+        setBulkDelete,
+        bulkBook,
+        setBulkBook,
+
+        deleteBulkBook,
+        handleBulkDelete,
+        isBulkDelete,
+        setIsBulkDelete,
       }}
     >
       {props.children}

@@ -3,7 +3,6 @@ import NavbarContext from "../context/navbar-context";
 import { Fetchdata } from "../hooks/getData";
 import Loading from "../Loading/Loading";
 import { BsArrowUpRight } from "react-icons/bs";
-import { Tabs, Tab } from "@mui/material";
 import AuthContext from "../context/auth-context";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -67,9 +66,6 @@ const RentedBook = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleStatusChange = (event, newValue) => {
-    setStatus(newValue);
-  };
   const handleGenreChange = (e) => {
     setGenre(e.target.value);
   };
@@ -105,18 +101,50 @@ const RentedBook = () => {
         <Heading title="Rented Books" />
         <div className="row align-items-center">
           <div className="col-md-8 ">
-            <div className="tabs ">
-              <Tabs
-                value={status}
-                onChange={handleStatusChange}
-                textColor="secondary"
-                indicatorColor="secondary"
-                aria-label="secondary tabs example"
-              >
-                <Tab value="-1" label="All" />
-                <Tab value="1" label="Available" />
-                <Tab value="2" label="Out" />
-              </Tabs>
+            <div className="custom-tabs">
+              <div>
+                <input
+                  type="radio"
+                  className="radio--button"
+                  name="status"
+                  id="allRentedStatus"
+                  onChange={(e) => setStatus(e.target.value)}
+                  value="-1"
+                  checked={status === "-1"}
+                />
+                <label className="label-radio px-3" htmlFor="allRentedStatus">
+                  All
+                </label>
+              </div>
+
+              <div>
+                <input
+                  type="radio"
+                  className="radio--button"
+                  name="status"
+                  id="available"
+                  onChange={(e) => setStatus(e.target.value)}
+                  value="1"
+                  checked={status === "1"}
+                />
+                <label className="label-radio px-3" htmlFor="available">
+                  Available
+                </label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  className="radio--button"
+                  name="status"
+                  id="out"
+                  onChange={(e) => setStatus(e.target.value)}
+                  value="2"
+                  checked={status === "2"}
+                />
+                <label className="label-radio px-3" htmlFor="out">
+                  Out
+                </label>
+              </div>
             </div>
           </div>
           <div className="col-md-4 d-flex justify-content-end">
@@ -141,7 +169,7 @@ const RentedBook = () => {
         </div>
 
         <div>
-          <div className="page_title_box pb-2 d-flex align-items-center">
+          <div className="page_title_box pb-1 d-flex align-items-center mt-3">
             <div className="page_title_left">
               <h5 className="f_s_30 f_w_700 dark_text">Categories</h5>
             </div>
@@ -157,10 +185,11 @@ const RentedBook = () => {
                   className="uk-input tab-input"
                   type="radio"
                   name="genre"
-                  id="all"
+                  id="allRentedGenre"
                   value="-1"
+                  checked={genre === "-1"}
                 />
-                <label htmlFor="all">All</label>
+                <label htmlFor="allRentedGenre">All</label>
               </div>
 
               {genreList.length > 0 && (
@@ -196,7 +225,7 @@ const RentedBook = () => {
             <>
               {bookData.length !== 0 ? (
                 <>
-                  <div className="row mt-3">
+                  <div className="row mt-3" style={{ rowGap: "40px" }}>
                     {bookData.map((props) => {
                       const { _id, BookName, Status, Image } = props;
                       return (

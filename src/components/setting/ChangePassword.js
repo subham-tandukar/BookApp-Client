@@ -7,7 +7,6 @@ import $ from "jquery";
 import NavbarContext from "../context/navbar-context";
 import ChangePasswordPop from "./ChangePasswordPopup";
 import Loading from "../Loading/Loading";
-import TextField from "@mui/material/TextField";
 
 const ChangePassword = ({
   changePassPopup,
@@ -118,7 +117,7 @@ const ChangePassword = ({
 
   return (
     <>
-      <div className="popup-bg changePasswordPopBg">
+      <div className="popup-bg changePasswordPopBg my-form">
         <div className="popup changePasswordPop">
           <div className="popup-head">
             <h4>Change Password</h4>
@@ -126,37 +125,47 @@ const ChangePassword = ({
               <GrFormClose size="2rem" color="#fff" />
             </div>
           </div>
-          <div className="popup-body">
-            <form className="form-padding">
-              <div className="row text-start">
+          <div className="popup-body cs_modal">
+            <form className=" modal-body p-0">
+              <div className="row text-start wrapper">
                 <div className="form-group">
-                  <div className="common_input mb_15">
-                    <TextField
-                      id="outlined-basic"
-                      label="Old Password*"
-                      variant="outlined"
-                      size="small"
-                      name="oldPassword"
-                      onChange={handleChange}
-                      value={formValues.oldPassword}
-                    />
-                    <p className="errormsg">{formErrors.oldPassword}</p>
+                  <div className=" mb_15">
+                    <div className="form-wrapper">
+                      <input
+                        type="password"
+                        className="uk-input"
+                        name="oldPassword"
+                        onChange={handleChange}
+                        value={formValues.oldPassword}
+                        autoComplete="off"
+                        required
+                      />
+                      <span class="span">Old Password</span>
+                    </div>
+                    {formErrors.oldPassword && (
+                      <p className="errormsg">{formErrors.oldPassword}</p>
+                    )}
                   </div>
                 </div>
               </div>
 
-              <div className="row text-start mt-3">
-                <div className="common_input mb_15">
-                  <TextField
-                    id="outlined-basic"
-                    label="New Password*"
-                    variant="outlined"
-                    size="small"
-                    name="newPassword"
-                    onChange={handleChange}
-                    value={formValues.newPassword}
-                  />
-                  <p className="errormsg">{formErrors.newPassword}</p>
+              <div className="row text-start mt-3 wrapper">
+                <div className=" mb_15">
+                  <div className="form-wrapper">
+                    <input
+                      type="password"
+                      className="uk-input"
+                      name="newPassword"
+                      onChange={handleChange}
+                      value={formValues.newPassword}
+                      autoComplete="off"
+                      required
+                    />
+                    <span class="span">New Password</span>
+                  </div>
+                  {formErrors.newPassword && (
+                    <p className="errormsg">{formErrors.newPassword}</p>
+                  )}
                 </div>
               </div>
             </form>

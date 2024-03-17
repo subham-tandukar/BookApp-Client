@@ -12,6 +12,7 @@ function UserState(props) {
   const [loading, setLoading] = useState(true);
   const [sortby, setSortby] = useState("");
   const [status, setStatus] = useState("-1");
+  const [showLast, setShowLast] = useState(false);
 
   //  to search -------
   const [searchValue, setSearchValue] = useState("");
@@ -29,12 +30,13 @@ function UserState(props) {
 
   useEffect(() => {
     userLst();
-  }, [sortby, status, search, page, pageSize]);
-
+  }, [sortby, status, search, page, pageSize, showLast]);
   const userLst = () => {
     const dataForm = {
       Type: "GET",
-      FetchURL: `${baseURL}/api/getUser?isVerified=${status}&sortby=${sortby}&page=${page}&pageSize=${pageSize}&search=${search}`,
+      FetchURL: `${baseURL}/api/getUser?isVerified=${status}&sortby=${sortby}&page=${page}&pageSize=${pageSize}&search=${search}&last=${
+        showLast === true ? "true" : ""
+      }`,
     };
 
     Fetchdata(dataForm).then(function (result) {
@@ -106,6 +108,95 @@ function UserState(props) {
       });
   };
 
+  // Bulk delete user
+  const [bulkDelete, setBulkDelete] = useState(false);
+  const [isBulkDelete, setIsBulkDelete] = useState(false);
+  const [bulkUsers, setBulkUsers] = useState([]);
+
+  // For all the users for bulk delete
+  const [selectedAllUserIds, setSelectedAllUserIds] = useState([]);
+
+  useEffect(() => {
+    if (bulkDelete) {
+      alluserLst();
+    } else {
+      setSelectedAllUserIds([]);
+    }
+  }, [
+    bulkDelete,
+    sortby,
+    status,
+    search,
+    page,
+    pageSize,
+    showLast,
+    totalItems,
+  ]);
+  const alluserLst = () => {
+    const dataForm = {
+      Type: "GET",
+      FetchURL: `${baseURL}/api/getUser?isVerified=${status}&sortby=${sortby}&page=1&pageSize=${totalItems}&search=${search}&last=${
+        showLast === true ? "true" : ""
+      }`,
+    };
+
+    Fetchdata(dataForm).then(function (result) {
+      if (result.StatusCode === 200) {
+        const postResult = result.Values ? result.Values : "";
+        // If all users are selected, update selectedAllUserIds accordingly
+
+        const filteredUsers = postResult.map((user) => user._id);
+        setSelectedAllUserIds(filteredUsers);
+        setBulkUsers(filteredUsers);
+      } else {
+        setSelectedAllUserIds([]);
+      }
+    });
+  };
+
+  const handleBulkDelete = () => {
+    $(".deletePopBg").fadeIn(300);
+    $(".deletePop").slideDown(500);
+  };
+
+  const deleteBulkUser = () => {
+    setIsBulkDelete(true);
+    const dataForm = {
+      BulkUserID: bulkUsers,
+      FLAG: "BD",
+      FetchURL: `${baseURL}/api/user`,
+      Type: "POST",
+    };
+
+    Fetchdata(dataForm)
+      .then(function (result) {
+        if (result.StatusCode === 200) {
+          $(".deletePopBg").fadeOut(300);
+          $(".deletePop").slideUp(500);
+          toast.success(
+            `${result.DeletedCount} ${
+              result.DeletedCount > 1 ? "Users" : "User"
+            } deleted sucessfully`,
+            {
+              theme: "light",
+            }
+          );
+
+          setIsBulkDelete(false);
+          setBulkUsers([]);
+          userLst();
+        } else {
+          toast.error(result.Message, {
+            theme: "light",
+          });
+          setIsBulkDelete(false);
+        }
+      })
+      .catch(() => {
+        setIsBulkDelete(false);
+      });
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -135,6 +226,17 @@ function UserState(props) {
         handleDelete,
         deleteUser,
         isDelete,
+        showLast,
+        setShowLast,
+        bulkDelete,
+        setBulkDelete,
+        bulkUsers,
+        setBulkUsers,
+        selectedAllUserIds,
+        deleteBulkUser,
+        handleBulkDelete,
+        isBulkDelete,
+        setIsBulkDelete,
       }}
     >
       {props.children}

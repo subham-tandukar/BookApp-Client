@@ -8,15 +8,17 @@ import clock from "../../img/clock.gif";
 import NavbarContext from "../context/navbar-context";
 import { Fetchdata } from "../hooks/getData";
 import Loading from "../Loading/Loading";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { Link } from "react-router-dom";
 import BookContext from "../context/book context folder/bookContext";
 import Heading from "../Layout/Heading";
+import AuthContext from "../context/auth-context";
 
 const Dashboard = () => {
   const { baseURL } = useContext(NavbarContext);
   const { setStatus } = useContext(BookContext);
+  const { UserDATA } = useContext(AuthContext);
 
   // get the count-----------------------------------
   const [count, setCount] = useState([]);
@@ -95,7 +97,8 @@ const Dashboard = () => {
       setUserList(originalList);
     }
   };
-
+  // Create an array with 5 elements (can be any value, e.g., null)
+  const mySkeleton = Array.from({ length: 5 }, (_, index) => index);
   return (
     <div className="container-fluid p-0">
       <div className="row">
@@ -142,108 +145,26 @@ const Dashboard = () => {
               {loading ? (
                 // <Loading />
                 <>
-                  {/* {userList.map(() => ( */}
-                  <div className="single_user_pil d-flex align-items-center justify-content-between">
-                    <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
-                      <div className="thumb_34 mr_15 mt-0 ">
-                        <Skeleton
-                          variant="circular"
-                          animation="wave"
-                          width={34}
-                          height={34}
-                        />
+                  {mySkeleton.map((_, index) => (
+                    <div
+                      key={index}
+                      className="single_user_pil py-2 d-flex align-items-center justify-content-between"
+                    >
+                      <div className="user_pils_thumb d-flex  flex-grow-1">
+                        <div className="thumb_34 mr_15 mt-0 ">
+                          <Skeleton
+                            className="my-skeleton"
+                            height={30}
+                            width={30}
+                            circle={true}
+                          />
+                        </div>
+                        <span className="f_s_14 f_w_400 text_color_11 w-100">
+                          <Skeleton className="my-skeleton" height={30} />
+                        </span>
                       </div>
-                      <span className="f_s_14 f_w_400 text_color_11 w-100">
-                        <Skeleton
-                          variant="text"
-                          animation="wave"
-                          width="100%"
-                          sx={{ fontSize: "1.5rem" }}
-                        />
-                      </span>
                     </div>
-                  </div>
-                  <div className="single_user_pil d-flex align-items-center justify-content-between">
-                    <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
-                      <div className="thumb_34 mr_15 mt-0 ">
-                        <Skeleton
-                          variant="circular"
-                          animation="wave"
-                          width={34}
-                          height={34}
-                        />
-                      </div>
-                      <span className="f_s_14 f_w_400 text_color_11 w-100">
-                        <Skeleton
-                          variant="text"
-                          animation="wave"
-                          width="100%"
-                          sx={{ fontSize: "1.5rem" }}
-                        />
-                      </span>
-                    </div>
-                  </div>
-                  <div className="single_user_pil d-flex align-items-center justify-content-between">
-                    <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
-                      <div className="thumb_34 mr_15 mt-0 ">
-                        <Skeleton
-                          variant="circular"
-                          animation="wave"
-                          width={34}
-                          height={34}
-                        />
-                      </div>
-                      <span className="f_s_14 f_w_400 text_color_11 w-100">
-                        <Skeleton
-                          variant="text"
-                          animation="wave"
-                          width="100%"
-                          sx={{ fontSize: "1.5rem" }}
-                        />
-                      </span>
-                    </div>
-                  </div>
-                  <div className="single_user_pil d-flex align-items-center justify-content-between">
-                    <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
-                      <div className="thumb_34 mr_15 mt-0 ">
-                        <Skeleton
-                          variant="circular"
-                          animation="wave"
-                          width={34}
-                          height={34}
-                        />
-                      </div>
-                      <span className="f_s_14 f_w_400 text_color_11 w-100">
-                        <Skeleton
-                          variant="text"
-                          animation="wave"
-                          width="100%"
-                          sx={{ fontSize: "1.5rem" }}
-                        />
-                      </span>
-                    </div>
-                  </div>
-                  <div className="single_user_pil d-flex align-items-center justify-content-between">
-                    <div className="user_pils_thumb d-flex align-items-center flex-grow-1">
-                      <div className="thumb_34 mr_15 mt-0 ">
-                        <Skeleton
-                          variant="circular"
-                          animation="wave"
-                          width={34}
-                          height={34}
-                        />
-                      </div>
-                      <span className="f_s_14 f_w_400 text_color_11 w-100">
-                        <Skeleton
-                          variant="text"
-                          animation="wave"
-                          width="100%"
-                          sx={{ fontSize: "1.5rem" }}
-                        />
-                      </span>
-                    </div>
-                  </div>
-                  {/* // ))} */}
+                  ))}
                 </>
               ) : (
                 <>
@@ -267,6 +188,9 @@ const Dashboard = () => {
                               <span className="f_s_14 f_w_400 text_color_11">
                                 {Name}
                               </span>
+                              {UserDATA.UserID === _id && (
+                                <span className="own">You</span>
+                              )}
                             </div>
 
                             {/* <div className="action_btns d-flex">

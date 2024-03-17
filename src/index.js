@@ -9,15 +9,13 @@ import { NavbarContextProvider } from "./components/context/navbar-context";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <AuthContextProvider>
-      <NavbarContextProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </NavbarContextProvider>
-    </AuthContextProvider>
-  </React.StrictMode>
+  <AuthContextProvider>
+    <NavbarContextProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </NavbarContextProvider>
+  </AuthContextProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -3,11 +3,13 @@ import Loading from "../Loading/Loading";
 import placeholder from "../../img/placeholder.png";
 import { BsArrowUpRight } from "react-icons/bs";
 import searchImg from "../../img/icon/icon_search.svg";
-import { MdVerified } from "react-icons/md";
+import { MdVerified, MdArrowDropUp, MdArrowDropDown } from "react-icons/md";
 import DeletePop from "../PopUp/DeletePop";
 import { timeAgo } from "../hooks/getTime";
 import UserContext from "../context/user context folder/userContext";
 import Heading from "../Layout/Heading";
+import AuthContext from "../context/auth-context";
+
 const User = () => {
   const {
     loading,
@@ -36,18 +38,29 @@ const User = () => {
     isDelete,
     handleDelete,
     deleteUser,
+    showLast,
+    setShowLast,
+    bulkDelete,
+    setBulkDelete,
+    bulkUsers,
+    setBulkUsers,
+    selectedAllUserIds,
+    deleteBulkUser,
+    handleBulkDelete,
+    isBulkDelete,
   } = useContext(UserContext);
+  const { UserDATA } = useContext(AuthContext);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setIsSubmit(true);
+    // setIsSubmit(true);
   };
-  useEffect(() => {
-    if (isSubmit) {
-      setSearch(searchValue);
-      setLoading(true);
-    }
-  }, [isSubmit]);
+  // useEffect(() => {
+  //   if (isSubmit) {
+  //     setSearch(searchValue);
+  //     setLoading(true);
+  //   }
+  // }, [isSubmit]);
 
   const ScrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -59,7 +72,7 @@ const User = () => {
     } else {
       setPage(page + 1);
     }
-    ScrollTop();
+    // ScrollTop();
   };
 
   const handlePrev = () => {
@@ -68,7 +81,36 @@ const User = () => {
     } else {
       setPage(page - 1);
     }
-    ScrollTop();
+    // ScrollTop();
+  };
+
+  const handleSelectBulkDelete = () => {
+    if (bulkDelete) {
+      setBulkDelete(false);
+      setBulkUsers([]);
+    } else {
+      setBulkDelete(true);
+    }
+  };
+
+  const handleSelectBulkUsers = (data) => {
+    setBulkDelete(false);
+
+    const hasBulkUsers = bulkUsers.find((user) => {
+      return user === data._id;
+    });
+    if (hasBulkUsers) {
+      const filterBulkUsers = bulkUsers.filter(
+        (user) => user !== hasBulkUsers.toString()
+      );
+      setBulkUsers(filterBulkUsers);
+    } else {
+      setBulkUsers([...bulkUsers, data._id]);
+
+      if (totalItems === bulkUsers.length + 1) {
+        setBulkDelete(true);
+      }
+    }
   };
 
   return (
@@ -78,7 +120,22 @@ const User = () => {
         <div className="white_card_header">
           <div className="row align-items-center uk-flex-wrap">
             <div className="col-sm-8">
-              <div className="d-flex gap-3">
+              <div className="d-flex flex-wrap gap-3">
+                <div>
+                  <div
+                    className={`${
+                      bulkUsers.length > 0 && "active"
+                    } bulk-delete-btn`}
+                  >
+                    <h5 className="mb-0" style={{ fontSize: "13px" }}>
+                      Bulk Delete
+                    </h5>
+                    <button onClick={handleBulkDelete}>
+                      Delete {bulkUsers.length}{" "}
+                      {bulkUsers.length > 1 ? "users" : "user"}
+                    </button>
+                  </div>
+                </div>
                 <div>
                   <h5 className="mb-0" style={{ fontSize: "13px" }}>
                     Sort By
@@ -92,8 +149,9 @@ const User = () => {
                     onChange={(e) => {
                       setSortby(e.target.value);
                       setPage(1);
-                      setTotalItems(0);
-                      setTotalPages(1);
+                      // if (!bulkDelete) {
+                      //   setBulkUsers([]);
+                      // }
                     }}
                   >
                     <option value="">Recently added</option>
@@ -114,13 +172,37 @@ const User = () => {
                     onChange={(e) => {
                       setStatus(e.target.value);
                       setPage(1);
-                      setTotalItems(0);
-                      setTotalPages(1);
+                      // if (!bulkDelete) {
+                      //   setBulkUsers([]);
+                      // }
                     }}
                   >
                     <option value="-1">All</option>
                     <option value="Y">Verified</option>
                     <option value="N">Unverified</option>
+                  </select>
+                </div>
+                <div>
+                  <h5 className="mb-0" style={{ fontSize: "13px" }}>
+                    Show entries
+                  </h5>
+                  <select
+                    name="pageSize"
+                    id=""
+                    className="uk-select "
+                    style={{ minWidth: "50px" }}
+                    onChange={(e) => {
+                      setPageSize(e.target.value);
+                      setPage(1);
+                    }}
+                    value={pageSize}
+                  >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
                   </select>
                 </div>
               </div>
@@ -135,8 +217,11 @@ const User = () => {
                           <input
                             type="text"
                             placeholder="Search"
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
+                            value={search}
+                            onChange={(e) => {
+                              setSearch(e.target.value);
+                              setPage(1);
+                            }}
                           />
                         </div>
                         <button type="submit" onClick={handleSearch}>
@@ -158,116 +243,182 @@ const User = () => {
             <>
               {userList.length > 0 ? (
                 <>
-                  <div className="user-table px-4">
-                    <div className="sn text-center">
-                      <h5>S.N.</h5>
-                    </div>
-                    <div className="users">
-                      <h5>Users</h5>
-                    </div>
-                    <div className="last-loggedin text-center">
-                      <h5>Last logged in</h5>
-                    </div>
-                    <div className="status text-center">
-                      <h5>Status</h5>
-                    </div>
-                    <div className="action text-center">
-                      <h5>Action</h5>
-                    </div>
-                  </div>
-                  {userList.map((props, i) => {
-                    const { _id, Name, Profile, Status, LastLoggedIn } = props;
-                    return (
+                  <div className="table__layout">
+                    <div className="user-table px-4">
+                      <div className="table__checkbox bulk__delete">
+                        <div className="checkbox__wrapper">
+                          <input
+                            checked={bulkDelete}
+                            type="checkbox"
+                            id="bulk-checkbox"
+                            className="checkbox-hidden"
+                            onChange={handleSelectBulkDelete}
+                          />
+                          <label
+                            htmlFor="bulk-checkbox"
+                            className="checkbox-visible"
+                          ></label>
+                        </div>
+                      </div>
+                      <div className="sn text-center">
+                        <h5>S.N.</h5>
+                      </div>
                       <div
-                        key={_id}
-                        className="user-table single_user_pil d-flex align-items-center justify-content-between"
+                        className="users table-icon"
+                        onClick={() => setShowLast(!showLast)}
                       >
-                        <div className="sn text-center">
-                          {(page - 1) * pageSize + i + 1}
-                        </div>
-                        <div className="users user_pils_thumb d-flex align-items-center">
-                          <div className="thumb_34 mr_15 mt-0">
-                            <img
-                              className="img-fluid radius_50"
-                              src={Profile.url}
-                              alt="Profile"
-                            />
+                        <h5>Users </h5>
+                        <div className="filter-icon">
+                          <div
+                            className={`filter-up ${
+                              showLast === false && "active"
+                            }`}
+                          >
+                            <MdArrowDropUp />
                           </div>
-                          <span className="f_s_14 f_w_400 text_color_11">
-                            {Name}
-                          </span>
+                          <div
+                            className={`filter-down ${
+                              showLast === true && "active"
+                            }`}
+                          >
+                            <MdArrowDropDown />
+                          </div>
                         </div>
-
-                        <div className="last-loggedin text-center">
-                          {LastLoggedIn ? (
-                            <span
-                              style={{ fontSize: "13px" }}
-                              className="text-black-50"
-                            >
-                              {timeAgo(LastLoggedIn)}
+                      </div>
+                      <div className="email">
+                        <h5>Email</h5>
+                      </div>
+                      <div className="last-loggedin text-center">
+                        <h5>Last logged in</h5>
+                      </div>
+                      <div className="status text-center">
+                        <h5>Status</h5>
+                      </div>
+                      <div className="action text-center">
+                        <h5>Action</h5>
+                      </div>
+                    </div>
+                    {userList.map((props, i) => {
+                      const {
+                        _id,
+                        Name,
+                        Email,
+                        Profile,
+                        Status,
+                        LastLoggedIn,
+                      } = props;
+                      return (
+                        <div
+                          key={_id}
+                          className="user-table single_user_pil d-flex align-items-center justify-content-between"
+                        >
+                          <div className="table__checkbox">
+                            <div className="checkbox__wrapper">
+                              <input
+                                checked={bulkUsers.includes(_id)}
+                                type="checkbox"
+                                id={_id}
+                                className="checkbox-hidden"
+                                onChange={() => handleSelectBulkUsers(props)}
+                              />
+                              <label
+                                htmlFor={_id}
+                                className="checkbox-visible"
+                              ></label>
+                            </div>
+                          </div>
+                          <div className="sn text-center">
+                            {(page - 1) * pageSize + i + 1}
+                          </div>
+                          <div className="users user_pils_thumb d-flex align-items-center">
+                            <div className="thumb_34 mr_15 mt-0">
+                              <img
+                                className="img-fluid radius_50"
+                                src={Profile.url}
+                                alt="Profile"
+                              />
+                            </div>
+                            <span className="f_s_14 f_w_400 text_color_11">
+                              {Name}
                             </span>
-                          ) : (
-                            "-"
-                          )}
-                        </div>
-                        <div className="status text-center">
-                          {Status === "Verified" ? (
-                            <span className="verified">
-                              Verified
-                              <MdVerified />
-                            </span>
-                          ) : Status === "Unverified" ? (
-                            <span className="unverified">Unverified</span>
-                          ) : (
-                            "-"
-                          )}
-                        </div>
+                            {UserDATA.UserID === _id && (
+                              <span className="own">You</span>
+                            )}
+                          </div>
 
-                        <div className="action action_btns d-flex justify-content-center">
-                          {/* <a href="#" className="action_btn mr_10">
+                          <div className="text-start email">
+                            <span className="f_s_14 f_w_400  text_color_11">
+                              {Email}
+                            </span>
+                          </div>
+
+                          <div className="last-loggedin text-center">
+                            {LastLoggedIn ? (
+                              <span
+                                style={{ fontSize: "13px" }}
+                                className="text-black-50"
+                              >
+                                {timeAgo(LastLoggedIn)}
+                              </span>
+                            ) : (
+                              "-"
+                            )}
+                          </div>
+                          <div className="status text-center">
+                            {Status === "Verified" ? (
+                              <span className="verified">
+                                Verified
+                                <MdVerified />
+                              </span>
+                            ) : Status === "Unverified" ? (
+                              <span className="unverified">Unverified</span>
+                            ) : (
+                              "-"
+                            )}
+                          </div>
+
+                          <div className="action action_btns d-flex justify-content-center">
+                            {/* <a href="#" className="action_btn mr_10">
                             {" "}
                             <i className="far fa-edit"></i>{" "}
                           </a> */}
-                          <div
-                            className="action_btn"
-                            onClick={() => handleDelete(props)}
-                          >
-                            {" "}
-                            <i className="fas fa-trash"></i>{" "}
+                            <div
+                              className={`action_btn ${
+                                bulkUsers.length > 0 ? "inactive" : ""
+                              }`}
+                              onClick={() => handleDelete(props)}
+                            >
+                              {" "}
+                              <i className="fas fa-trash"></i>{" "}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
 
-                  {pageSize < totalItems && (
-                    <div className="d-flex align-items-center gap-4 justify-content-end">
-                      <div className="d-flex align-items-center gap-2">
-                        <select
-                          name="pageSize"
-                          id=""
-                          className="uk-select pageSize"
-                          style={{ minWidth: "50px", flex: "1" }}
-                          onChange={(e) => {
-                            setPageSize(e.target.value);
-                            setPage(1);
-                            setTotalItems(0);
-                            ScrollTop();
-                            setTotalPages(1);
-                          }}
-                          value={pageSize}
-                        >
-                          <option value="5">5</option>
-                          <option value="10">10</option>
-                          <option value="15">15</option>
-                          <option value="20">20</option>
-                          <option value="25">25</option>
-                          <option value="30">30</option>
-                        </select>
+                  <div className="d-flex align-items-center gap-4 justify-content-between">
+                    <div className="d-flex align-items-center gap-2">
+                      <div>
                         <h5 className="mb-0" style={{ fontSize: "13px" }}>
-                          Per page
+                          Showing{" "}
+                          {(page - 1) * pageSize + 1 ===
+                          (page - 1) * pageSize + userList.length ? (
+                            ""
+                          ) : (
+                            <>
+                              <strong>{(page - 1) * pageSize + 1}</strong> to{" "}
+                            </>
+                          )}
+                          <strong>
+                            {(page - 1) * pageSize + userList.length}
+                          </strong>{" "}
+                          of <strong>{totalItems}</strong> results
                         </h5>
                       </div>
+                    </div>
+
+                    {pageSize < totalItems && (
                       <div id="pagination">
                         <div className="pagination-item">
                           <div
@@ -282,22 +433,57 @@ const User = () => {
                         {Array.from(
                           { length: totalPages },
                           (_, index) => index + 1
-                        ).map((pageNumber) => (
-                          <div
-                            className="pagination-item"
-                            key={pageNumber}
-                            onClick={() => {
-                              setPage(pageNumber);
-                              ScrollTop();
-                            }}
-                          >
-                            <span
-                              className={pageNumber === page ? "active" : ""}
-                            >
-                              {pageNumber}
-                            </span>
-                          </div>
-                        ))}
+                        ).map((pageNumber) => {
+                          if (
+                            pageNumber === 1 || // Display the first page number
+                            pageNumber === totalPages || // Display the last page number
+                            (pageNumber >= page - 1 && pageNumber <= page + 1) // Display the range around the current page
+                          ) {
+                            return (
+                              <div
+                                className="pagination-item"
+                                key={pageNumber}
+                                onClick={() => {
+                                  setPage(pageNumber);
+                                  // ScrollTop();
+                                }}
+                              >
+                                <span
+                                  className={
+                                    pageNumber === page ? "active" : ""
+                                  }
+                                >
+                                  {pageNumber}
+                                </span>
+                              </div>
+                            );
+                          } else if (
+                            pageNumber === 2 &&
+                            page > 2 // Display the dot after the first page if necessary
+                          ) {
+                            return (
+                              <div
+                                className="pagination-item dots"
+                                key={pageNumber}
+                              >
+                                <span>...</span>
+                              </div>
+                            );
+                          } else if (
+                            pageNumber === totalPages - 1 &&
+                            page < totalPages - 1 // Display the dot before the last page if necessary
+                          ) {
+                            return (
+                              <div
+                                className="pagination-item dots"
+                                key={pageNumber}
+                              >
+                                <span>...</span>
+                              </div>
+                            );
+                          }
+                          return null; // Return null for pages not meeting any condition
+                        })}
 
                         <div className="pagination-item">
                           <div
@@ -308,8 +494,8 @@ const User = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </>
               ) : (
                 <p className="text-center">No user found.</p>
@@ -319,7 +505,13 @@ const User = () => {
         </div>
       </div>
 
-      <DeletePop title="User" handleDelete={deleteUser} loading={isDelete} />
+      <DeletePop
+        title={`${bulkUsers.length > 0 ? bulkUsers.length : ""} ${
+          bulkUsers.length > 1 ? "Users" : "User"
+        }`}
+        handleDelete={bulkUsers.length > 0 ? deleteBulkUser : deleteUser}
+        loading={bulkUsers.length > 0 ? isBulkDelete : isDelete}
+      />
     </>
   );
 };

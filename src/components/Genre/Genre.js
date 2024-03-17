@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useRef } from "react";
 import $ from "jquery";
 import { GrFormClose } from "react-icons/gr";
-import TextField from "@mui/material/TextField";
 import GenreContext from "../context/genre context folder/genreContext";
 import CloseIcon from "../../img/CloseIcon.svg";
 import Plus from "../../img/Plus.png";
+import AddIcon from "../../img/icon/add.svg";
 import { toast } from "react-toastify";
 import DeletePop from "../PopUp/DeletePop";
 import { Fetchdata } from "../hooks/getData";
@@ -193,12 +193,11 @@ const Genre = () => {
         <Heading title="Add Genre" />
         <div className="row">
           <div className="col-12">
-            <div className="white_card card_height_100 mb_30">
-              
+            <div className="white_card card_height_100 mb_30 my-form">
               <div className="white_card_body pt-3">
                 <div className="row">
-                  <div className="d-flex uk-flex-middle uk-flex-wrap uk-flex-between">
-                    <div className=" d-flex uk-flex-middle uk-flex-wrap">
+                  <div className="d-flex uk-flex-middle uk-flex-wrap uk-flex-between cs_modal">
+                    <div className=" d-flex uk-flex-middle uk-flex-wrap modal-body p-0">
                       <div className="me-3 mt-3">
                         <div
                           className="BoxUpload"
@@ -208,15 +207,14 @@ const Genre = () => {
                             {!genreIsUploaded ? (
                               <>
                                 <label htmlFor="upload-input" className="p-2">
-                                  <img
-                                    src={Plus}
-                                    draggable={"false"}
-                                    alt="placeholder"
-                                    style={{
-                                      width: 70,
-                                      height: 55,
-                                    }}
-                                  />
+                                 
+                                    <img
+                                      src={AddIcon}
+                                      alt="Add Image"
+                                      width={24}
+                                      height={24}
+                                    />
+                                  
                                 </label>
 
                                 <input
@@ -250,26 +248,34 @@ const Genre = () => {
                             )}
                           </div>
                         </div>
-                        <p className="errormsg">{formError.genreImg}</p>
+                        {formError.genreImg && (
+                          <p className="errormsg">{formError.genreImg}</p>
+                        )}
                       </div>
-                      <div className="me-3 mt-3">
-                        <TextField
-                          id="outlined-basic"
-                          label="Genre*"
-                          variant="outlined"
-                          size="small"
-                          name="genre"
-                          onChange={handleChange}
-                          value={formValue.genre}
-                        />
-                        <p className="errormsg">{formError.genre}</p>
+                      <div className="me-3 mt-3 wrapper">
+                        <div className="form-wrapper">
+                          <input
+                            type="text"
+                            className="uk-input"
+                            name="genre"
+                            onChange={handleChange}
+                            value={formValue.genre}
+                            autoComplete="off"
+                            required
+                          />
+                          <span class="span">Genre*</span>
+                        </div>
+
+                        {formError.genre && (
+                          <p className="errormsg">{formError.genre}</p>
+                        )}
                       </div>
-                      <div className="me-3 mt-3">
+                      <div className="me-3">
                         {toggleBtn ? (
                           <div className="create_report_btn">
                             <button
                               onClick={handleUpdate}
-                              className={`btn_1 radius_btn d-block text-center w-100 px-4 ${
+                              className={`btn_1 radius_btn d-block text-center w-100 px-5 ${
                                 isEditSubmit ? "disable-cursor" : ""
                               }`}
                             >
